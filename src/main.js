@@ -7,8 +7,13 @@ import {createShowMoreButtonTemplate} from './view/show-more-button';
 import {createTopRatedTemplate} from './view/top-rated';
 import {createMostCommentedTemplate} from './view/most-commented';
 import {createAmountFilmsTemplate} from './view/amount-films';
+import {generateFilm} from './mock/film';
 
-const FILM_COUNT = 3;
+const FILM_COUNT = 20;
+
+const films = new Array(FILM_COUNT).fill().map(generateFilm);
+
+console.log(films);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -29,7 +34,7 @@ const filmsListElement = document.querySelector('.films-list');
 const cardContainerElement = document.querySelector('.films-list__container');
 
 for (let i = 0; i < FILM_COUNT; i++) {
-  render(cardContainerElement, createFilmCardTemplate(), 'beforeend');
+  render(cardContainerElement, createFilmCardTemplate(films[i]), 'beforeend');
 }
 render (filmsListElement, createShowMoreButtonTemplate(), 'beforeend');
 render (filmsBoardElement, createTopRatedTemplate(), 'beforeend');
