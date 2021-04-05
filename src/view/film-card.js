@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const createFilmCardTemplate = (film) => {
   const {name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList} = film;
@@ -8,11 +8,11 @@ export const createFilmCardTemplate = (film) => {
     : '';
 
   const watchedClassName = isWatched
-  ? 'film-card__controls-item--active'
+    ? 'film-card__controls-item--active'
     : '';
 
   const favoriteClassName = isFavorite
-  ? 'film-card__controls-item--active'
+    ? 'film-card__controls-item--active'
     : '';
 
   return `<article class="film-card">

@@ -1,6 +1,7 @@
 import {createRankUserTemplate} from './view/rank-user';
 import {createMenuNavTemplate} from './view/menu-nav';
 import {createSortTemplate} from './view/sort';
+import {createPopupTemplate} from './view/popup';
 import {createFilmListTemplate} from './view/film-list';
 import {createFilmCardTemplate} from './view/film-card';
 import {createShowMoreButtonTemplate} from './view/show-more-button';
@@ -13,12 +14,11 @@ const FILM_COUNT = 20;
 
 const films = new Array(FILM_COUNT).fill().map(generateFilm);
 
-console.log(films);
-
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
+const siteBodyElement = document.querySelector('.hide-overflow');
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const footerStatisticsElement = document.querySelector('.footer__statistics');
@@ -33,7 +33,9 @@ const filmsBoardElement = document.querySelector('.films');
 const filmsListElement = document.querySelector('.films-list');
 const cardContainerElement = document.querySelector('.films-list__container');
 
-for (let i = 0; i < FILM_COUNT; i++) {
+render (siteBodyElement, createPopupTemplate(), 'beforeend');
+
+for (let i = 1; i < FILM_COUNT; i++) {
   render(cardContainerElement, createFilmCardTemplate(films[i]), 'beforeend');
 }
 render (filmsListElement, createShowMoreButtonTemplate(), 'beforeend');

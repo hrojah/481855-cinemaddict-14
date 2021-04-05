@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {generateComment} from "./comment";
+import {generateComment} from './comment';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -24,9 +24,8 @@ const generateGenres = () => {
     const randomIndex = getRandomInteger(0, genres.length - 1);
     randomGenres.push(genres[randomIndex]);
   }
-  return randomGenres.join(` `);
-
-}
+  return randomGenres.join(' ');
+};
 
 const generateCountry = () => {
   const country = [
@@ -40,7 +39,7 @@ const generateCountry = () => {
   const randomIndex = getRandomInteger(0, country.length - 1);
 
   return country[randomIndex];
-}
+};
 
 const generateDirector = () => {
   const directors = [
@@ -52,10 +51,10 @@ const generateDirector = () => {
     'Roman Polanski',
   ];
 
-  const randomIndex = getRandomInteger(1, directors.length -1)
+  const randomIndex = getRandomInteger(1, directors.length -1);
 
   return directors[randomIndex];
-}
+};
 
 const generateActors = () => {
   const actors = [
@@ -69,14 +68,14 @@ const generateActors = () => {
     'Robin Williams',
   ];
   const actorsCount = getRandomInteger(1, 5);
-  const randomActors = []
+  const randomActors = [];
 
   for (let i = 0; i < actorsCount; i++) {
     const randomIndex = getRandomInteger(0, actors.length - 1);
     randomActors.push(actors[randomIndex]);
   }
-  return randomActors.join(`, `);
-}
+  return randomActors.join(', ');
+};
 
 const generateWriters = () => {
   const writers = [
@@ -98,18 +97,18 @@ const generateWriters = () => {
     const randomIndex = getRandomInteger(0, writers.length - 1);
     randomWriters.push(writers[randomIndex]);
   }
-  return randomWriters.join(`, `);
-}
+  return randomWriters.join(', ');
+};
 
 const generateRating = (min = 0, max = 10) => {
   const rating = Math.random() * (max - min) + min;
   return rating.toFixed(1);
-}
+};
 
 const generateAgeRating = () => {
   const age = getRandomInteger(2, 18);
-  return age + `+`;
-}
+  return age + '+';
+};
 
 const generateName = () => {
   const names = [
@@ -126,7 +125,7 @@ const generateName = () => {
   const randomIndex = getRandomInteger(0, names.length - 1);
 
   return names[randomIndex];
-}
+};
 
 const generateDescription = () => {
   const descriptions = [
@@ -149,22 +148,22 @@ const generateDescription = () => {
     const randomIndex = getRandomInteger(1, descriptions.length - 1);
     randomDescriptions.push(descriptions[randomIndex]);
   }
-  return randomDescriptions.join(` `);
-}
+  return randomDescriptions.join(' ');
+};
 
 const generateDate = () => {
   const maxYearsGap = 90;
   const yearsGap = getRandomInteger(-maxYearsGap, 0);
 
   return dayjs().add(yearsGap, 'year').toDate();
-}
+};
 
 const generateRuntime = () => {
   const duration = getRandomInteger(90, 180);
   const hours = Math.floor(duration / 60);
   const minutesLeft = duration - (hours * 60);
-  return hours + `h` + ` ` + minutesLeft + `m`
-}
+  return hours + 'h' + ' ' + minutesLeft + 'm';
+};
 
 export const generateFilm = () => {
   const commentCount = getRandomInteger(0, 5);
@@ -173,7 +172,7 @@ export const generateFilm = () => {
   return {
     name: generateName(),
     originName: generateName(),
-    poster: `./images/posters/made-for-each-other.png`,
+    poster: './images/posters/made-for-each-other.png',
     rating: generateRating(),
     director: generateDirector(),
     writers: generateWriters(),
@@ -188,5 +187,5 @@ export const generateFilm = () => {
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     comments: comments,
-  }
-}
+  };
+};
