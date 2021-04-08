@@ -10,15 +10,17 @@ import {createMostCommentedTemplate} from './view/most-commented';
 import {createAmountFilmsTemplate} from './view/amount-films';
 import {generateFilm} from './mock/film';
 
-const FILM_COUNT = 20;
+export const FILM_COUNT = 20;
 
 const films = new Array(FILM_COUNT).fill().map(generateFilm);
+const topRatedFilms = films.slice().sort((a, b) => b.rating - a.rating);
+const mostCommentsFilms = films.slice().sort((a,b) => b.comments.length - a.comments.length);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const siteBodyElement = document.querySelector('.hide-overflow');
+const siteBodyElement = document.querySelector('body');
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const footerStatisticsElement = document.querySelector('.footer__statistics');
@@ -32,13 +34,24 @@ render (siteMainElement, createFilmListTemplate(), 'beforeend');
 const filmsBoardElement = document.querySelector('.films');
 const filmsListElement = document.querySelector('.films-list');
 const cardContainerElement = document.querySelector('.films-list__container');
+render (siteBodyElement, createPopupTemplate(films[0]), 'beforeend');
 
-render (siteBodyElement, createPopupTemplate(), 'beforeend');
-
-for (let i = 1; i < FILM_COUNT; i++) {
+for (let i = 0; i < FILM_COUNT; i++) {
   render(cardContainerElement, createFilmCardTemplate(films[i]), 'beforeend');
 }
 render (filmsListElement, createShowMoreButtonTemplate(), 'beforeend');
 render (filmsBoardElement, createTopRatedTemplate(), 'beforeend');
+
+const topRatedFilmsContainer = document.querySelector('.top-rated');
+
+for (let i = 0; i < 2; i++) {
+  render(topRatedFilmsContainer, createFilmCardTemplate(topRatedFilms[i]), 'beforeend');
+}
 render (filmsBoardElement, createMostCommentedTemplate(), 'beforeend');
+
+const mostCommentedFilmsContainer = document.querySelector('.most-commented');
+
+for (let i = 0; i < 2; i++) {
+  render(mostCommentedFilmsContainer, createFilmCardTemplate(mostCommentsFilms[i]), 'beforeend');
+}
 render (footerStatisticsElement, createAmountFilmsTemplate(), 'beforeend');
