@@ -1,23 +1,10 @@
 import dayjs from 'dayjs';
 import {generateComment} from './comment';
-
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
+import {getRandomInteger} from '../utils';
+import {genres, country, directors, actors, writers, names, descriptions} from '../const';
 
 const generateGenres = () => {
-  const genres = [
-    'Musical',
-    'Drama',
-    'Western',
-    'Comedy',
-    'Cartoon',
-  ];
-
-  const genresCount = getRandomInteger(0, 3);
+  const genresCount = getRandomInteger(1, 3);
   const randomGenres = [];
 
   for (let i = 0; i < genresCount; i++) {
@@ -28,45 +15,18 @@ const generateGenres = () => {
 };
 
 const generateCountry = () => {
-  const country = [
-    'USA',
-    'France',
-    'Russian',
-    'Italy',
-    'Spain',
-  ];
-
   const randomIndex = getRandomInteger(0, country.length - 1);
 
   return country[randomIndex];
 };
 
 const generateDirector = () => {
-  const directors = [
-    'Guillermo del Toro',
-    'David Cronenberg',
-    'Woody Allen',
-    'Tim Burton',
-    'Lars von Trier',
-    'Roman Polanski',
-  ];
-
   const randomIndex = getRandomInteger(1, directors.length -1);
 
   return directors[randomIndex];
 };
 
 const generateActors = () => {
-  const actors = [
-    'Jack Nicholson',
-    'Marlon Brando',
-    'Robert De Niro',
-    'Al Pacino',
-    'Tom Hanks',
-    'Anthony Hopkins',
-    'Michael Caine',
-    'Robin Williams',
-  ];
   const actorsCount = getRandomInteger(1, 5);
   const randomActors = [];
 
@@ -78,18 +38,6 @@ const generateActors = () => {
 };
 
 const generateWriters = () => {
-  const writers = [
-    'Charlie Kaufman',
-    'Terry Giliam',
-    'Joel Coen',
-    'Aaron Sorkin',
-    'Martin Scorsese',
-    'Francis Ford Coppola',
-    'Wes Anderson',
-    'Quentin Tarantino',
-    'Robert Zemeckis',
-  ];
-
   const writersCount = getRandomInteger(1, 3);
   const randomWriters = [];
 
@@ -111,37 +59,13 @@ const generateAgeRating = () => {
 };
 
 const generateName = () => {
-  const names = [
-    'The Shawshank Redemption',
-    'Green mile',
-    'Interstellar',
-    'Forrest Gump',
-    'Back to the Future',
-    'Pulp Fiction',
-    'Inception',
-    'Snatch',
-  ];
-
   const randomIndex = getRandomInteger(0, names.length - 1);
 
   return names[randomIndex];
 };
 
 const generateDescription = () => {
-  const descriptions = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    'Cras aliquet varius magna, non porta ligula feugiat eget.',
-    'Fusce tristique felis at fermentum pharetra.',
-    'Aliquam id orci ut lectus varius viverra.',
-    'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-    'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
-    'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
-    'Sed sed nisi sed augue convallis suscipit in sed felis.',
-    'Aliquam erat volutpat.',
-    'Nunc fermentum tortor ac porta dapibus.',
-    'In rutrum ac purus sit amet tempus.',
-  ];
-  const descriptionCount = getRandomInteger(0, 5);
+  const descriptionCount = getRandomInteger(1, 5);
   const randomDescriptions = [];
 
   for (let i = 0; i < descriptionCount; i++) {
