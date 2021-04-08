@@ -9,7 +9,7 @@ import {createTopRatedTemplate} from './view/top-rated';
 import {createMostCommentedTemplate} from './view/most-commented';
 import {createAmountFilmsTemplate} from './view/amount-films';
 import {generateFilm} from './mock/film';
-import {generateFilter} from "./mock/filter";
+import {generateFilter} from './mock/filter';
 
 const FILM_COUNT = 20;
 const FILM_COUNT_PER_STEP = 5;
@@ -35,9 +35,8 @@ render (siteMainElement, createSortTemplate(), 'beforeend');
 render (siteMainElement, createFilmListTemplate(), 'beforeend');
 
 const filmsBoardElement = document.querySelector('.films');
-const filmsListElement = document.querySelector('.films-list');
 const cardContainerElement = document.querySelector('.films-list__container');
-// render (siteBodyElement, createPopupTemplate(films[0]), 'beforeend');
+render (siteBodyElement, createPopupTemplate(films[0]), 'beforeend');
 
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
   render(cardContainerElement, createFilmCardTemplate(films[i]), 'beforeend');

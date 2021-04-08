@@ -1,21 +1,17 @@
 const createRank = (filter) => {
-  const history = filter.find(item => item.name === 'History');
+  const history = filter.find((item) => item.name === 'History');
   const filmsCount = history.count;
   switch (true) {
     case filmsCount === 0:
-      return ''
-      break;
+      return '';
     case filmsCount >= 0 && filmsCount <= 10:
-      return '<p class="profile__rating">Novice</p>'
-      break;
+      return '<p class="profile__rating">Novice</p>';
     case filmsCount >= 10 && filmsCount <= 20:
-      return '<p class="profile__rating">Fun</p>'
-      break;
+      return '<p class="profile__rating">Fun</p>';
     case filmsCount > 20:
-      return '<p class="profile__rating">Movie Buff</p>'
-      break;
+      return '<p class="profile__rating">Movie Buff</p>';
   }
-}
+};
 export const createRankUserTemplate = (filter) => {
   return `<section class="header__profile profile">
        ${createRank(filter)}
