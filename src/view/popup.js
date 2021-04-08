@@ -1,27 +1,10 @@
-import dayjs from 'dayjs';
+import {commentDate, fullDate, isCheckboxChecked, genre} from '../utils';
 
 export const createPopupTemplate = (film) => {
   const {name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList} = film;
-  const date = dayjs(releaseDate).format('DD MMMM YYYY');
-  const genresFilm = genres.length > 1
-    ? 'Genres'
-    : 'Genres';
-
-  const watchListClassName = isWatchList
-    ? 'checked'
-    : '';
-
-  const watchedClassName = isWatched
-    ? 'checked'
-    : '';
-
-  const favoriteClassName = isFavorite
-    ? 'checked'
-    : '';
+  const genresFilm = genres.split(' ');
 
   const renderComments = () => {
-    const {date} = comments;
-    const dateComment = dayjs(date).format('YYYY/MM/DD hh:mm');
     return comments
       .map((comment) => {
         return `<li class="film-details__comment">
@@ -32,7 +15,7 @@ export const createPopupTemplate = (film) => {
              <p class="film-details__comment-text">${comment.text}</p>
              <p class="film-details__comment-info">
                <span class="film-details__comment-author">${comment.author}</span>
-               <span class="film-details__comment-day">${dateComment}</span>                <button class="film-details__comment-delete">Delete</button>
+               <span class="film-details__comment-day">${commentDate(comment.date)}</span>                <button class="film-details__comment-delete">Delete</button>
               </p>
             </div>
           </li>`;
@@ -40,6 +23,13 @@ export const createPopupTemplate = (film) => {
       .join('');
   };
 
+  const renderGenres = () => {
+    return genresFilm
+      .map((genre) => {
+        return `<span class="film-details__genre">${genre}</span>`;
+      })
+      .join(' ');
+  };
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -81,7 +71,7 @@ export const createPopupTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${date}</td>
+              <td class="film-details__cell">${fullDate(releaseDate)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -92,11 +82,9 @@ export const createPopupTemplate = (film) => {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genresFilm}</td>
+              <td class="film-details__term">${genre(genresFilm)}</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">Drama</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
+                ${renderGenres()}
             </tr>
           </table>
 
@@ -107,13 +95,13 @@ export const createPopupTemplate = (film) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchListClassName}>
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isCheckboxChecked(isWatchList)}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watchedClassName}>
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isCheckboxChecked(isWatched)}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favoriteClassName}>
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isCheckboxChecked(isFavorite)}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>

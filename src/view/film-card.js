@@ -1,25 +1,13 @@
-import dayjs from 'dayjs';
+import {date, isButtonActive} from '../utils';
 
 export const createFilmCardTemplate = (film) => {
   const {name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList} = film;
-  const date = dayjs(releaseDate).format('YYYY');
-  const watchListClassName = isWatchList
-    ? 'film-card__controls-item--active'
-    : '';
-
-  const watchedClassName = isWatched
-    ? 'film-card__controls-item--active'
-    : '';
-
-  const favoriteClassName = isFavorite
-    ? 'film-card__controls-item--active'
-    : '';
 
   return `<article class="film-card">
           <h3 class="film-card__title">${name}</h3>
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
-            <span class="film-card__year">${date}</span>
+            <span class="film-card__year">${date(releaseDate)}</span>
             <span class="film-card__duration">${runtime}</span>
             <span class="film-card__genre">${genres}</span>
           </p>
@@ -27,9 +15,9 @@ export const createFilmCardTemplate = (film) => {
           <p class="film-card__description">${description}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <div class="film-card__controls">
-            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchListClassName}" type="button">Add to watchlist</button>
-            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watchedClassName}" type="button">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}" type="button">Mark as favorite</button>
+            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isButtonActive(isWatchList)}" type="button">Add to watchlist</button>
+            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isButtonActive(isWatched)}" type="button">Mark as watched</button>
+            <button class="film-card__controls-item button film-card__controls-item--favorite ${isButtonActive(isFavorite)}" type="button">Mark as favorite</button>
           </div>
         </article>`;
 };

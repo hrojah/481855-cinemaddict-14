@@ -34,7 +34,7 @@ render (siteMainElement, createFilmListTemplate(), 'beforeend');
 const filmsBoardElement = document.querySelector('.films');
 const filmsListElement = document.querySelector('.films-list');
 const cardContainerElement = document.querySelector('.films-list__container');
-render (siteBodyElement, createPopupTemplate(films[0]), 'beforeend');
+// render (siteBodyElement, createPopupTemplate(films[0]), 'beforeend');
 
 for (let i = 0; i < FILM_COUNT; i++) {
   render(cardContainerElement, createFilmCardTemplate(films[i]), 'beforeend');
