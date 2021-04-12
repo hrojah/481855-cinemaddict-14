@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
+import {createElement} from '../utils';
 
-export const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
+const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
   const genresFilm = genres.split(' ');
   const isCheckboxChecked = (flag) => {
     return flag === true ? 'checked' : '';
@@ -160,3 +161,26 @@ export const createPopupTemplate = ({name, originName, rating, director, writers
   </form>
 </section>`;
 };
+
+export default class FilmPopup {
+  constructor(film) {
+    this._film = film;
+    this.element = null;
+  }
+
+  getTemplate() {
+    return createPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
+
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
+  }
+}
