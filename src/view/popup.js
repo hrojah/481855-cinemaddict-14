@@ -1,8 +1,22 @@
-import {commentDate, fullDate, isCheckboxChecked, genre} from '../utils';
+import dayjs from "dayjs";
 
-export const createPopupTemplate = (film) => {
-  const {name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList} = film;
+export const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
   const genresFilm = genres.split(' ');
+  const isCheckboxChecked = (flag) => {
+    return flag === true ? 'checked' : '';
+  };
+
+  const genre = (genres) => {
+    return genres.length > 1 ? 'Genres' : 'Genre';
+  };
+
+  const fullDate = (date) => {
+    return dayjs(date).format('DD MMMM YYYY');
+  };
+
+  const commentDate = (date) => {
+    return dayjs(date).format('YYYY/MM/DD hh:mm');
+  };
 
   const renderComments = () => {
     return comments

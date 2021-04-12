@@ -1,7 +1,9 @@
-import {date, isButtonActive} from '../utils';
+import {date} from '../utils';
 
-export const createFilmCardTemplate = (film) => {
-  const {name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList} = film;
+export const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
+  const isButtonActive = (flag) => {
+    return flag === true ? 'film-card__controls-item--active' : '';
+  };
 
   return `<article class="film-card">
           <h3 class="film-card__title">${name}</h3>

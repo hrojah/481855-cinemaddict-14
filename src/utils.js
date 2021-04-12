@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -8,25 +6,33 @@ export const getRandomInteger = (a = 0, b = 1) => {
 };
 
 export const date = (date) => {
-  return dayjs(date).format('YYYY');
+  return date.getFullYear();
 };
 
-export const fullDate = (date) => {
-  return dayjs(date).format('DD MMMM YYYY');
+export const topRatedFilms = (films) => {
+  return films.slice().sort((a, b) => b.rating - a.rating);
 };
 
-export const commentDate = (date) => {
-  return dayjs(date).format('YYYY/MM/DD hh:mm');
+export const mostCommentsFilms = (films) => {
+  return films.slice().sort((a,b) => b.comments.length - a.comments.length);
 };
 
-export const isCheckboxChecked = (flag) => {
-  return flag === true ? 'checked' : '';
+export const getRandomElement = (arr) => {
+  const randomIndex = getRandomInteger(0, arr.length - 1);
+
+  return arr[randomIndex];
 };
 
-export const isButtonActive = (flag) => {
-  return flag === true ? 'film-card__controls-item--active' : '';
-};
+export const getRandomArr = (min, max, arr) => {
+  const count = getRandomInteger(min, max);
+  const randomArr = [];
 
-export const genre = (genres) => {
-  return genres.length > 1 ? 'Genres' : 'Genre';
+  for (let i = 0; i < count; i++) {
+    const index = Math.floor(Math.random() * (arr.length - i)) + i;
+    const element = arr[index];
+    arr[index] = arr[i];
+    arr[i] = element;
+    randomArr.push(element);
+  }
+  return randomArr;
 };

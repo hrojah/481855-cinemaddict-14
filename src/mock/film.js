@@ -1,52 +1,6 @@
-import dayjs from 'dayjs';
 import {generateComment} from './comment';
-import {getRandomInteger} from '../utils';
-import {genres, country, directors, actors, writers, names, descriptions} from '../const';
-
-const generateGenres = () => {
-  const genresCount = getRandomInteger(1, 3);
-  const randomGenres = [];
-
-  for (let i = 0; i < genresCount; i++) {
-    const randomIndex = getRandomInteger(0, genres.length - 1);
-    randomGenres.push(genres[randomIndex]);
-  }
-  return randomGenres.join(' ');
-};
-
-const generateCountry = () => {
-  const randomIndex = getRandomInteger(0, country.length - 1);
-
-  return country[randomIndex];
-};
-
-const generateDirector = () => {
-  const randomIndex = getRandomInteger(1, directors.length -1);
-
-  return directors[randomIndex];
-};
-
-const generateActors = () => {
-  const actorsCount = getRandomInteger(1, 5);
-  const randomActors = [];
-
-  for (let i = 0; i < actorsCount; i++) {
-    const randomIndex = getRandomInteger(0, actors.length - 1);
-    randomActors.push(actors[randomIndex]);
-  }
-  return randomActors.join(', ');
-};
-
-const generateWriters = () => {
-  const writersCount = getRandomInteger(1, 3);
-  const randomWriters = [];
-
-  for (let i = 0; i < writersCount; i++) {
-    const randomIndex = getRandomInteger(0, writers.length - 1);
-    randomWriters.push(writers[randomIndex]);
-  }
-  return randomWriters.join(', ');
-};
+import {getRandomInteger, getRandomElement, getRandomArr} from '../utils';
+import {GENRES, COUNTRY, DIRECTORS, ACTORS, WRITERS, NAMES, DESCRIPTIONS, MIN_AGE, MAX_AGE, MIN_DURATION, MAX_DURATION, MINUTES_IN_HOUR, MIN_ELEMENTS, MAX_ELEMENTS, COUNT_ELEMENTS} from '../const';
 
 const generateRating = (min = 0, max = 10) => {
   const rating = Math.random() * (max - min) + min;
@@ -54,57 +8,50 @@ const generateRating = (min = 0, max = 10) => {
 };
 
 const generateAgeRating = () => {
-  const age = getRandomInteger(2, 18);
+  const age = getRandomInteger(MIN_AGE, MAX_AGE);
   return age + '+';
 };
 
-const generateName = () => {
-  const randomIndex = getRandomInteger(0, names.length - 1);
-
-  return names[randomIndex];
-};
-
 const generateDescription = () => {
-  const descriptionCount = getRandomInteger(1, 5);
+  const descriptionCount = getRandomInteger(MIN_ELEMENTS, MAX_ELEMENTS);
   const randomDescriptions = [];
 
   for (let i = 0; i < descriptionCount; i++) {
-    const randomIndex = getRandomInteger(1, descriptions.length - 1);
-    randomDescriptions.push(descriptions[randomIndex]);
+    const randomIndex = getRandomInteger(MIN_ELEMENTS, DESCRIPTIONS.length - 1);
+    randomDescriptions.push(DESCRIPTIONS[randomIndex]);
   }
   return randomDescriptions.join(' ');
 };
 
 const generateDate = () => {
-  const maxYearsGap = 90;
-  const yearsGap = getRandomInteger(-maxYearsGap, 0);
-
-  return dayjs().add(yearsGap, 'year').toDate();
+  const date = getRandomInteger(-1104548400000, Date.now())
+  return new Date(date);
 };
 
 const generateRuntime = () => {
-  const duration = getRandomInteger(90, 180);
-  const hours = Math.floor(duration / 60);
-  const minutesLeft = duration - (hours * 60);
+  const duration = getRandomInteger(MIN_DURATION, MAX_DURATION);
+  const hours = Math.floor(duration / MINUTES_IN_HOUR);
+  const minutesLeft = duration - (hours * MINUTES_IN_HOUR);
   return hours + 'h' + ' ' + minutesLeft + 'm';
 };
 
+
 export const generateFilm = () => {
-  const commentCount = getRandomInteger(0, 5);
+  const commentCount = getRandomInteger(0, MAX_ELEMENTS);
   const comments = new Array(commentCount).fill().map(generateComment);
 
   return {
-    name: generateName(),
-    originName: generateName(),
+    name: getRandomElement(NAMES),
+    originName: getRandomElement(NAMES),
     poster: './images/posters/made-for-each-other.png',
     rating: generateRating(),
-    director: generateDirector(),
-    writers: generateWriters(),
-    actors: generateActors(),
+    director: getRandomElement(DIRECTORS),
+    writers: getRandomArr(MIN_ELEMENTS, COUNT_ELEMENTS, WRITERS).join(', '),
+    actors: getRandomArr(MIN_ELEMENTS, MAX_ELEMENTS, ACTORS).join(', '),
     releaseDate: generateDate(),
     runtime: generateRuntime(),
-    country: generateCountry(),
-    genres: generateGenres(),
+    country: getRandomElement(COUNTRY),
+    genres: getRandomArr(MIN_ELEMENTS,COUNT_ELEMENTS, GENRES).join(' '),
     description: generateDescription(),
     ageRating: generateAgeRating(),
     isWatchList: Boolean(getRandomInteger(0, 1)),
