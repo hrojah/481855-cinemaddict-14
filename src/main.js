@@ -10,8 +10,8 @@ import {createMostCommentedTemplate} from './view/most-commented';
 import {createAmountFilmsTemplate} from './view/amount-films';
 import {generateFilm} from './mock/film';
 import {generateFilter} from './mock/filter';
-import {topRatedFilms, mostCommentsFilms} from "./utils";
-import {DISPLAYED_MOVIES} from "./const";
+import {topRatedFilms, mostCommentsFilms} from './utils';
+import {DISPLAYED_MOVIES} from './const';
 
 const FILM_COUNT = 20;
 const FILM_COUNT_PER_STEP = 5;

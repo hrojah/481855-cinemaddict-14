@@ -1,5 +1,5 @@
-import {TEXTS, AUTHORS} from "../const";
-import {getRandomInteger, getRandomElement} from "../utils";
+import {TEXTS, AUTHORS} from '../const';
+import {getRandomInteger, getRandomElement} from '../utils';
 
 const generateEmoji = () => {
   const emoji = [
@@ -15,7 +15,7 @@ const generateEmoji = () => {
 };
 
 const generateDate = () => {
-  const day = getRandomInteger(1, 31)
+  const day = getRandomInteger(1, 31);
   return new Date().setDate(day);
 };
 

@@ -24,7 +24,7 @@ const generateDescription = () => {
 };
 
 const generateDate = () => {
-  const date = getRandomInteger(-1104548400000, Date.now())
+  const date = getRandomInteger(-1104548400000, Date.now());
   return new Date(date);
 };
 
