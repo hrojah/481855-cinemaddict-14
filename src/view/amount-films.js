@@ -1,3 +1,3 @@
-export const createAmountFilmsTemplate = () => {
-  return `<p>130 291 movies inside</p>`;
+export const createAmountFilmsTemplate = (text = '130 291 movies inside') => {
+  return `<p>${text}</p>`;
 };
