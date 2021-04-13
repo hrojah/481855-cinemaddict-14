@@ -1,6 +1,6 @@
-import {date} from '../utils';
+import {date, createElement} from '../utils';
 
-export const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
+const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
   const isButtonActive = (flag) => {
     return flag === true ? 'film-card__controls-item--active' : '';
   };
@@ -23,3 +23,26 @@ export const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genr
           </div>
         </article>`;
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this.element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
+
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
+  }
+}
