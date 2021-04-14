@@ -4,7 +4,7 @@ import {createElement} from '../utils';
 const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
   const genresFilm = genres.split(' ');
   const isCheckboxChecked = (flag) => {
-    return flag === true ? 'checked' : '';
+    return flag ? 'checked' : '';
   };
 
   const genre = (genres) => {
