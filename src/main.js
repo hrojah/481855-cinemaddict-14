@@ -67,7 +67,7 @@ const renderBoard = (boardContainer, boardFilms) => {
     const topRatedFilmsContainer = topRatedContainer.getElement().querySelector('.top-rated');
 
     for (let i = 0; i < DISPLAYED_MOVIES; i++) {
-      renderFilm(topRatedFilmsContainer, films[i]);
+      renderFilm(topRatedFilmsContainer, topRatedFilms(films)[i]);
     }
 
     const mostCommentedContainer = new MostCommentedView();
@@ -77,7 +77,7 @@ const renderBoard = (boardContainer, boardFilms) => {
     const mostCommentedFilmsContainer = mostCommentedContainer.getElement().querySelector('.most-commented');
 
     for (let i = 0; i < DISPLAYED_MOVIES; i++) {
-      renderFilm(mostCommentedFilmsContainer, films[i]);
+      renderFilm(mostCommentedFilmsContainer, mostCommentsFilms(films)[i]);
     }
   }
 };
