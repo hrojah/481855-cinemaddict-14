@@ -59,3 +59,7 @@ export const getRandomArr = (min, max, arr) => {
   }
   return randomArr;
 };
+
+export const isEscPressed = (evt) => {
+  return (evt.key === 'Escape' || evt.key === 'Esc');
+};

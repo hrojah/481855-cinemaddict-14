@@ -1,18 +1,16 @@
 import {createElement} from '../utils';
 
-const createListEmptyTemplate = () => {
-  return `<section class="films-list">
-      <h2 class="films-list__title">There are no movies in our database</h2>
-    </section>`;
+const createBoardTemplate = () => {
+  return '<section class="films"></section>';
 };
 
-export default class ListEmpty {
+export default class Board {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createListEmptyTemplate();
+    return createBoardTemplate();
   }
 
   getElement() {
@@ -24,7 +22,6 @@ export default class ListEmpty {
   }
 
   removeElement() {
-    this._element = null;
+    this.element = null;
   }
 }
-

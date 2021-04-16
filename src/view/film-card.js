@@ -2,7 +2,7 @@ import {date, createElement} from '../utils';
 
 const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
   const isButtonActive = (flag) => {
-    return flag === true ? 'film-card__controls-item--active' : '';
+    return flag ? 'film-card__controls-item--active' : '';
   };
 
   return `<article class="film-card">
