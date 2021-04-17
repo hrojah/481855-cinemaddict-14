@@ -24,16 +24,16 @@ const filters = generateFilter(films);
 const renderBoard = (boardContainer, boardFilms) => {
   const boardComponent = new BoardView();
 
-  render(siteMainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
+  render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 
   if (boardFilms.length === 0) {
-    render(siteMainElement, new ListEmptyView().getElement(), RenderPosition.BEFOREEND);
+    render(siteMainElement, new ListEmptyView(), RenderPosition.BEFOREEND);
   } else {
-    render(siteMainElement, new SortView().getElement(), RenderPosition.BEFOREEND);
+    render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
 
     const filmsListComponent = new FilmListView();
 
-    render(boardComponent.getElement(), filmsListComponent.getElement(), RenderPosition.BEFOREEND);
+    render(boardComponent, filmsListComponent, RenderPosition.BEFOREEND);
 
     const cardContainerElement = filmsListComponent.getElement().querySelector('.films-list__container');
 
@@ -45,7 +45,7 @@ const renderBoard = (boardContainer, boardFilms) => {
       let renderedFilmCount = FILM_COUNT_PER_STEP;
       const showMoreButtonComponent = new ShowMoreButtonView();
 
-      render(boardComponent.getElement(), showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+      render(boardComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
 
       showMoreButtonComponent.setClickHandler(() => {
         films
@@ -62,7 +62,7 @@ const renderBoard = (boardContainer, boardFilms) => {
 
     const topRatedContainer = new TopRatedView();
 
-    render(boardComponent.getElement(), topRatedContainer.getElement(), RenderPosition.BEFOREEND);
+    render(boardComponent, topRatedContainer, RenderPosition.BEFOREEND);
 
     const topRatedFilmsContainer = topRatedContainer.getElement().querySelector('.top-rated');
 
@@ -72,7 +72,7 @@ const renderBoard = (boardContainer, boardFilms) => {
 
     const mostCommentedContainer = new MostCommentedView();
 
-    render(boardComponent.getElement(), mostCommentedContainer.getElement(), RenderPosition.BEFOREEND);
+    render(boardComponent, mostCommentedContainer, RenderPosition.BEFOREEND);
 
     const mostCommentedFilmsContainer = mostCommentedContainer.getElement().querySelector('.most-commented');
 
@@ -87,7 +87,7 @@ const renderFilm = (filmListElement, film) => {
 
   const renderPopup = () => {
     const filmPopupComponent = new FilmPopupView(film);
-    render(siteBodyElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
+    render(siteBodyElement, filmPopupComponent, RenderPosition.BEFOREEND);
     siteBodyElement.classList.add('hide-overflow');
 
     const closePopup = () => {
@@ -112,7 +112,7 @@ const renderFilm = (filmListElement, film) => {
     renderPopup();
   });
 
-  render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmListElement, filmComponent, RenderPosition.BEFOREEND);
 };
 
 const siteBodyElement = document.querySelector('body');
@@ -121,9 +121,9 @@ const siteMainElement = document.querySelector('.main');
 const footerStatisticsElement = document.querySelector('.footer__statistics');
 
 
-render(siteHeaderElement, new RankUserView(filters).getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new MenuNavView(filters).getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new RankUserView(filters), RenderPosition.BEFOREEND);
+render(siteMainElement, new MenuNavView(filters), RenderPosition.BEFOREEND);
 
 renderBoard(siteMainElement, films);
 
-render(footerStatisticsElement, new AmountFilmsView().getElement(), RenderPosition.BEFOREEND);
+render(footerStatisticsElement, new AmountFilmsView(), RenderPosition.BEFOREEND);
