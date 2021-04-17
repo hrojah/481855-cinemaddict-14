@@ -1,5 +1,5 @@
 import {TEXTS, AUTHORS} from '../const';
-import {getRandomInteger, getRandomElement} from '../utils';
+import {getRandomInteger, getRandomElement} from '../utils/common';
 
 const generateEmoji = () => {
   const emoji = [
