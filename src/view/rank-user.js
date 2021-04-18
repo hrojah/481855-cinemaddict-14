@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractView from './abstract';
 
 const createRank = (filter) => {
   const history = filter.find((item) => item.name === 'History');
@@ -22,25 +22,13 @@ const createRankUserTemplate = (filter) => {
   </section>`;
 };
 
-export default class RankUser {
+export default class RankUser extends AbstractView {
   constructor(filters) {
+    super();
     this._filters = filters;
-    this._element = null;
   }
 
   getTemplate() {
     return createRankUserTemplate(this._filters);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

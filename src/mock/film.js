@@ -1,5 +1,5 @@
 import {generateComment} from './comment';
-import {getRandomInteger, getRandomElement, getRandomArr} from '../utils';
+import {getRandomInteger, getRandomElement, getRandomArr} from '../utils/common';
 import {GENRES, COUNTRY, DIRECTORS, ACTORS, WRITERS, NAMES, DESCRIPTIONS, MIN_AGE, MAX_AGE, MIN_DURATION, MAX_DURATION, MINUTES_IN_HOUR, MIN_ELEMENTS, MAX_ELEMENTS, COUNT_ELEMENTS} from '../const';
 
 const generateRating = (min = 0, max = 10) => {
