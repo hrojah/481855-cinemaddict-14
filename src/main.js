@@ -47,7 +47,7 @@ const renderBoard = (boardContainer, boardFilms) => {
 
       render(boardComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
 
-      showMoreButtonComponent.setClickHandler(() => {
+      const showMoreFilms = () => {
         films
           .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
           .forEach((boardFilm) => renderFilm(cardContainerElement, boardFilm));
@@ -57,7 +57,9 @@ const renderBoard = (boardContainer, boardFilms) => {
         if (renderedFilmCount >= films.length) {
           remove(showMoreButtonComponent);
         }
-      });
+      };
+
+      showMoreButtonComponent.setClickHandler(showMoreFilms);
     }
 
     const topRatedContainer = new TopRatedView();
@@ -95,9 +97,7 @@ const renderFilm = (filmListElement, film) => {
       siteBodyElement.classList.remove('hide-overflow');
     };
 
-    filmPopupComponent.setClickHandler(() => {
-      closePopup();
-    });
+    filmPopupComponent.setClickHandler(closePopup);
 
     const onEscKeydown = (evt) => {
       if (isEscPressed(evt)) {
@@ -108,9 +108,7 @@ const renderFilm = (filmListElement, film) => {
     document.addEventListener('keydown', onEscKeydown);
   };
 
-  filmComponent.setClickHandler(() => {
-    renderPopup();
-  });
+  filmComponent.setClickHandler(renderPopup);
 
   render(filmListElement, filmComponent, RenderPosition.BEFOREEND);
 };
