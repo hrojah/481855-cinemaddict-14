@@ -122,9 +122,7 @@ export default class Board {
   }
 
   _handleFilmChange(updatedFilm) {
-    console.log(this._boardFilms.find((prevFilm) => prevFilm.id === updatedFilm.id));
     this._boardFilms = updateItem(this._boardFilms, updatedFilm);
-    console.log(updatedFilm);
     this._filmPresenter[updatedFilm.id].init(updatedFilm);
   }
 

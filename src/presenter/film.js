@@ -6,11 +6,11 @@ import {isEscPressed} from '../utils/common';
 const Mode = {
   DEFAULT: 'DEFAULT',
   POPUP: 'POPUP',
-}
+};
 
 export default class Film {
   constructor(siteBodyElement, filmListContainer, changeData, changeMode) {
-    this._siteBodyElement = siteBodyElement
+    this._siteBodyElement = siteBodyElement;
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;

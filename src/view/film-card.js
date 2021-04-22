@@ -74,11 +74,11 @@ export default class FilmCard extends AbstractView {
 
   setWatchListClickHandler(callback) {
     this._callback.watchListClick = callback;
-    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._watchListClickHandler)
+    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._watchListClickHandler);
   }
 
   setWatchedClickHandler(callback) {
     this._callback.watchedClick = callback;
-    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._watchedClickHandler)
+    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._watchedClickHandler);
   }
 }
