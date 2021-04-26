@@ -42,7 +42,7 @@ export default class Film {
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {
+    if (this._mode === Mode.DEFAULT || this._mode === Mode.POPUP) {
       replace(this._filmComponent, prevFilmComponent);
     }
 
