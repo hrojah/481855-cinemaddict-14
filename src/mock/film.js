@@ -1,6 +1,7 @@
 import {generateComment} from './comment';
 import {getRandomInteger, getRandomElement, getRandomArr} from '../utils/common';
 import {GENRES, COUNTRY, DIRECTORS, ACTORS, WRITERS, NAMES, DESCRIPTIONS, MIN_AGE, MAX_AGE, MIN_DURATION, MAX_DURATION, MINUTES_IN_HOUR, MIN_ELEMENTS, MAX_ELEMENTS, COUNT_ELEMENTS} from '../const';
+import {nanoid} from 'nanoid';
 
 const generateRating = (min = 0, max = 10) => {
   const rating = Math.random() * (max - min) + min;
@@ -41,6 +42,7 @@ export const generateFilm = () => {
   const comments = new Array(commentCount).fill().map(generateComment);
 
   return {
+    id: nanoid(),
     name: getRandomElement(NAMES),
     originName: getRandomElement(NAMES),
     poster: './images/posters/made-for-each-other.png',
