@@ -30,6 +30,7 @@ export const isEscPressed = (evt) => {
 };
 
 export const updateItem = (items, update) => {
+  debugger;
   const index = items.findIndex((item) => item.id === update.id);
 
   if (index === -1) {

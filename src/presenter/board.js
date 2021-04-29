@@ -18,6 +18,8 @@ export default class Board {
     this._boardContainer = boardContainer;
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
     this._filmPresenter = {};
+    this._filmPresenterTopRated = {};
+    this._filmPresenterMostCommented = {};
     this._currentSortType = SortType.DEFAULT;
 
 
@@ -29,6 +31,8 @@ export default class Board {
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleTopRatedFilmChange = this._handleTopRatedFilmChange.bind(this);
+    this._handleMostCommentedFilmChange = this._handleMostCommentedFilmChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
@@ -38,6 +42,8 @@ export default class Board {
   init(boardFilms) {
     this._boardFilms = boardFilms.slice();
     this._sourcedBoardFilms = boardFilms.slice();
+    this._topRatedFilms = topRatedFilms(this._boardFilms);
+    this._mostCommentedFilms = mostCommentsFilms(this._boardFilms);
     this._renderSort();
     render(this._boardContainer, this._boardComponent, RenderPosition.BEFOREEND);
     this._renderBoard();
@@ -52,6 +58,18 @@ export default class Board {
     const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleFilmChange, this._handleModeChange);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
+  }
+
+  _renderTopRatedFilm(filmListElement, film) {
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleTopRatedFilmChange, this._handleModeChange);
+    filmPresenter.init(film);
+    this._filmPresenterTopRated[film.id] = filmPresenter;
+  }
+
+  _renderMostCommentedFilm(filmListElement, film) {
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleMostCommentedFilmChange, this._handleModeChange);
+    filmPresenter.init(film);
+    this._filmPresenterMostCommented[film.id] = filmPresenter;
   }
 
   _renderFilms(from, to) {
@@ -104,7 +122,7 @@ export default class Board {
     render(this._boardComponent, this._topRatedContainer, RenderPosition.BEFOREEND);
 
     for (let i = 0; i < DISPLAYED_MOVIES; i++) {
-      this._renderFilm(this._topRatedFilmsContainer, topRatedFilms(this._boardFilms)[i]);
+      this._renderTopRatedFilm(this._topRatedFilmsContainer, this._topRatedFilms[i]);
     }
   }
 
@@ -114,7 +132,7 @@ export default class Board {
     render(this._boardComponent, this._mostCommentedContainer, RenderPosition.BEFOREEND);
 
     for (let i = 0; i < DISPLAYED_MOVIES; i++) {
-      this._renderFilm(this._mostCommentedFilmsContainer, mostCommentsFilms(this._boardFilms)[i]);
+      this._renderMostCommentedFilm(this._mostCommentedFilmsContainer, this._mostCommentedFilms[i]);
     }
   }
 
@@ -133,6 +151,16 @@ export default class Board {
     this._boardFilms = updateItem(this._boardFilms, updatedFilm);
     this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, updatedFilm);
     this._filmPresenter[updatedFilm.id].init(updatedFilm);
+  }
+
+  _handleTopRatedFilmChange(updatedFilm) {
+    this._topRatedFilms = updateItem(this._topRatedFilms, updatedFilm);
+    this._filmPresenterTopRated[updatedFilm.id].init(updatedFilm);
+  }
+
+  _handleMostCommentedFilmChange(updatedFilm) {
+    this._mostCommentedFilms = updateItem(this._mostCommentedFilms, updatedFilm);
+    this._filmPresenterMostCommented[updatedFilm.id].init(updatedFilm);
   }
 
   _handleModeChange() {
