@@ -119,6 +119,7 @@ export default class Board {
   }
 
   _clearFilmList() {
+    debugger;
     Object
       .values(this._filmPresenter)
       .forEach((presenter) => presenter.destroy());
