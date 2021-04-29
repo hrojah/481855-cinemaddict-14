@@ -9,3 +9,11 @@ export const topRatedFilms = (films) => {
 export const mostCommentsFilms = (films) => {
   return films.slice().sort((a,b) => b.comments.length - a.comments.length);
 };
+
+export const sortRating = (filmA, filmB) => {
+  return filmB.rating - filmA.rating;
+};
+
+export const sortDate = (filmA, filmB) => {
+  return filmB.releaseDate - filmA.releaseDate;
+};
