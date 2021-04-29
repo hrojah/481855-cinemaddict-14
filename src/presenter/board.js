@@ -31,8 +31,6 @@ export default class Board {
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
-    this._handleTopRatedFilmChange = this._handleTopRatedFilmChange.bind(this);
-    this._handleMostCommentedFilmChange = this._handleMostCommentedFilmChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
@@ -61,13 +59,13 @@ export default class Board {
   }
 
   _renderTopRatedFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleTopRatedFilmChange, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleFilmChange, this._handleModeChange);
     filmPresenter.init(film);
     this._filmPresenterTopRated[film.id] = filmPresenter;
   }
 
   _renderMostCommentedFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleMostCommentedFilmChange, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleFilmChange, this._handleModeChange);
     filmPresenter.init(film);
     this._filmPresenterMostCommented[film.id] = filmPresenter;
   }
@@ -148,19 +146,20 @@ export default class Board {
   }
 
   _handleFilmChange(updatedFilm) {
+    console.log(this._filmPresenterTopRated);
+    debugger;
     this._boardFilms = updateItem(this._boardFilms, updatedFilm);
     this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, updatedFilm);
-    this._filmPresenter[updatedFilm.id].init(updatedFilm);
-  }
-
-  _handleTopRatedFilmChange(updatedFilm) {
     this._topRatedFilms = updateItem(this._topRatedFilms, updatedFilm);
-    this._filmPresenterTopRated[updatedFilm.id].init(updatedFilm);
-  }
-
-  _handleMostCommentedFilmChange(updatedFilm) {
     this._mostCommentedFilms = updateItem(this._mostCommentedFilms, updatedFilm);
-    this._filmPresenterMostCommented[updatedFilm.id].init(updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
+    if (updatedFilm.id in this._filmPresenterTopRated) {
+      this._filmPresenterTopRated[updatedFilm.id].init(updatedFilm);
+    }
+
+    if (updatedFilm.id in this._filmPresenterMostCommented) {
+      this._filmPresenterMostCommented[updatedFilm.id].init(updatedFilm);
+    }
   }
 
   _handleModeChange() {
