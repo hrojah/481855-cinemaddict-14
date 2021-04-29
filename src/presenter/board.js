@@ -146,8 +146,6 @@ export default class Board {
   }
 
   _handleFilmChange(updatedFilm) {
-    console.log(this._filmPresenterTopRated);
-    debugger;
     this._boardFilms = updateItem(this._boardFilms, updatedFilm);
     this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, updatedFilm);
     this._topRatedFilms = updateItem(this._topRatedFilms, updatedFilm);
