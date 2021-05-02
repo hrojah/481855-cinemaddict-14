@@ -84,7 +84,9 @@ export default class Film {
 
   destroy() {
     remove(this._filmComponent);
-    remove(this._popupComponent);
+    if (this._popupComponent !== null) {
+      this._closePopup();
+    }
   }
 
   _handleFavoriteClick() {

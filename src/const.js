@@ -17,3 +17,8 @@ export const MIN_ELEMENTS = 1;
 export const COUNT_ELEMENTS = 3;
 export const MAX_ELEMENTS = 5;
 export const FILM_COUNT_PER_STEP = 5;
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};
