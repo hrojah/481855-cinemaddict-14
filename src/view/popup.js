@@ -238,7 +238,7 @@ export default class FilmPopup extends SmartView {
 
   setFormSubmitHandler(callback) {
     this._callback.submit = callback;
-    this.getElement().querySelector('form').addEventListener('keydown', e => {
+    this.getElement().querySelector('form').addEventListener('keydown', (e) => {
       if (e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
         this._formSubmitHandler();
       }
@@ -272,6 +272,6 @@ export default class FilmPopup extends SmartView {
 
   _emojiClickHandler(evt) {
     evt.preventDefault();
-    this.getElement().querySelector('.film-details__add-emoji-label').innerHTML = `<img src="images/emoji/${evt.target.value}.png" width="55" height="55" alt="emoji-smile">`
+    this.getElement().querySelector('.film-details__add-emoji-label').innerHTML = `<img src="images/emoji/${evt.target.value}.png" width="55" height="55" alt="emoji-smile">`;
   }
 }
