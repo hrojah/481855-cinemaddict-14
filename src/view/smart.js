@@ -23,12 +23,14 @@ export default class Smart extends Abstract {
   updateElement() {
     const prevElement = this.getElement();
     const parent = prevElement.parentElement;
+    const scroll = prevElement.scrollTop;
     this.removeElement();
 
     const newElement = this.getElement();
 
     parent.replaceChild(newElement, prevElement);
 
+    newElement.scrollTop = scroll;
     this.restoreHandlers();
   }
 
