@@ -25,6 +25,7 @@ export default class Film {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
 
   init(film) {
@@ -58,6 +59,7 @@ export default class Film {
     this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchListClickHandler(this._handleWatchlistClick);
     this._popupComponent.setWatchedClickHandler(this._handleWatchedClick);
+    this._popupComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._siteBodyElement.classList.add('hide-overflow');
     this._popupComponent.setClickHandler(this._closePopup);
     document.addEventListener('keydown', this._escKeydownHandler);
@@ -123,6 +125,10 @@ export default class Film {
         },
       ),
     );
+  }
+
+  _handleFormSubmit(film) {
+    this._changeData(film);
   }
 
   resetView() {
