@@ -1,4 +1,4 @@
-import AbstractView from './abstract';
+import SmartView from './smart';
 import dayjs from 'dayjs';
 
 const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
@@ -162,7 +162,7 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
 </section>`;
 };
 
-export default class FilmPopup extends AbstractView {
+export default class FilmPopup extends SmartView {
   constructor(film) {
     super();
     this._film = film;
@@ -171,10 +171,29 @@ export default class FilmPopup extends AbstractView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
+    this._favoriteToggleHandler = this._favoriteToggleHandler.bind(this);
+    this._watchedToggleHandler = this._watchedToggleHandler.bind(this);
+    this._watchListToggleHandler = this._watchListToggleHandler.bind(this);
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
     return createPopupTemplate(this._film);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setClickHandler(this._callback.click);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.film-details__control-label--favorite').addEventListener('click', this._favoriteToggleHandler);
+    this.getElement().querySelector('.film-details__control-label--watched').addEventListener('click', this._watchedToggleHandler);
+    this.getElement().querySelector('.film-details__control-label--watchlist').addEventListener('click', this._watchListToggleHandler);
+    this.getElement().querySelector('.film-details__emoji-list').addEventListener('change', this._emojiClickHandler);
   }
 
   _clickHandler(evt) {
@@ -215,5 +234,44 @@ export default class FilmPopup extends AbstractView {
   setWatchedClickHandler(callback) {
     this._callback.watchedClick = callback;
     this.getElement().querySelector('.film-details__control-label--watched').addEventListener('click', this._watchedClickHandler);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.submit = callback;
+    this.getElement().querySelector('form').addEventListener('keydown', (e) => {
+      if (e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
+        this._formSubmitHandler();
+      }
+    });
+  }
+
+  _formSubmitHandler() {
+    this._callback.submit(this._film);
+  }
+
+  _favoriteToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      isFavorite: !this._film.isFavorite,
+    });
+  }
+
+  _watchedToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      isWatched: !this._film.isWatched,
+    });
+  }
+
+  _watchListToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      isWatchList: !this._film.isWatchList,
+    });
+  }
+
+  _emojiClickHandler(evt) {
+    evt.preventDefault();
+    this.getElement().querySelector('.film-details__add-emoji-label').innerHTML = `<img src="images/emoji/${evt.target.value}.png" width="55" height="55" alt="emoji-smile">`;
   }
 }
