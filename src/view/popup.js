@@ -1,22 +1,11 @@
 import SmartView from './smart';
-import dayjs from 'dayjs';
+import {formatDate, genre, fullDate, commentDate} from '../utils/films';
 
 const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
   const genresFilm = genres.split(' ');
+
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
-  };
-
-  const genre = (genres) => {
-    return genres.length > 1 ? 'Genres' : 'Genre';
-  };
-
-  const fullDate = (date) => {
-    return dayjs(date).format('DD MMMM YYYY');
-  };
-
-  const commentDate = (date) => {
-    return dayjs(date).format('YYYY/MM/DD hh:mm');
   };
 
   const renderComments = () => {
@@ -90,7 +79,7 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${runtime}</td>
+              <td class="film-details__cell">${formatDate(runtime)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

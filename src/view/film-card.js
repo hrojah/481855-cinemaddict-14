@@ -1,5 +1,6 @@
 import AbstractView from './abstract';
 import {date} from '../utils/films';
+import {formatDate} from '../utils/films';
 
 const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
   const isButtonActive = (flag) => {
@@ -11,7 +12,7 @@ const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, pos
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${date(releaseDate)}</span>
-            <span class="film-card__duration">${runtime}</span>
+            <span class="film-card__duration">${formatDate(runtime)}</span>
             <span class="film-card__genre">${genres}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
