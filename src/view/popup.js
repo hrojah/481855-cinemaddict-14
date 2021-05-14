@@ -1,7 +1,10 @@
 import SmartView from './smart';
-import {formatDate, genre, fullDate, commentDate} from '../utils/films';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import {formatDate, genre, fullDate} from '../utils/films';
+dayjs.extend(relativeTime);
 
-const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
+const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}, text) => {
   const genresFilm = genres.split(' ');
 
   const isCheckboxChecked = (flag) => {
@@ -19,7 +22,7 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
              <p class="film-details__comment-text">${comment.text}</p>
              <p class="film-details__comment-info">
                <span class="film-details__comment-author">${comment.author}</span>
-               <span class="film-details__comment-day">${commentDate(comment.date)}</span>                <button class="film-details__comment-delete">Delete</button>
+               <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>                <button class="film-details__comment-delete">Delete</button>
               </p>
             </div>
           </li>`;
@@ -120,7 +123,7 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
           <div class="film-details__add-emoji-label"></div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${text}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
@@ -155,7 +158,9 @@ export default class FilmPopup extends SmartView {
   constructor(film) {
     super();
     this._film = film;
-
+    this._id = this._film.id;
+    this._textarea =  '';
+    this._newComment = {};
     this._clickHandler = this._clickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
@@ -165,12 +170,14 @@ export default class FilmPopup extends SmartView {
     this._watchListToggleHandler = this._watchListToggleHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+    this._textInputHandler = this._textInputHandler.bind(this);
 
     this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createPopupTemplate(this._film);
+    return createPopupTemplate(this._film, this._textarea);
   }
 
   restoreHandlers() {
@@ -183,6 +190,14 @@ export default class FilmPopup extends SmartView {
     this.getElement().querySelector('.film-details__control-label--watched').addEventListener('click', this._watchedToggleHandler);
     this.getElement().querySelector('.film-details__control-label--watchlist').addEventListener('click', this._watchListToggleHandler);
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('change', this._emojiClickHandler);
+    this.getElement().querySelectorAll('.film-details__comment-delete').forEach((item, index) => {
+      item.addEventListener('click', this._deleteClickHandler(index, this._id));
+    });
+    this.getElement().querySelector('form').addEventListener('keydown', (evt) => {
+      if (evt.keyCode === 13 && (evt.ctrlKey || evt.metaKey)) {
+        this._formSubmitHandler(evt);
+      }
+    });
   }
 
   _clickHandler(evt) {
@@ -227,15 +242,13 @@ export default class FilmPopup extends SmartView {
 
   setFormSubmitHandler(callback) {
     this._callback.submit = callback;
-    this.getElement().querySelector('form').addEventListener('keydown', (e) => {
-      if (e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
-        this._formSubmitHandler();
-      }
-    });
   }
 
-  _formSubmitHandler() {
-    this._callback.submit(this._film);
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.submit(this._newComment, this._id);
+    this._textarea = '';
+    this.updateElement();
   }
 
   _favoriteToggleHandler(evt) {
@@ -261,6 +274,29 @@ export default class FilmPopup extends SmartView {
 
   _emojiClickHandler(evt) {
     evt.preventDefault();
+    this._newComment.emoji = `images/emoji/${evt.target.value}.png`;
     this.getElement().querySelector('.film-details__add-emoji-label').innerHTML = `<img src="images/emoji/${evt.target.value}.png" width="55" height="55" alt="emoji-smile">`;
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.delete = callback;
+  }
+
+  setInputHandler() {
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textInputHandler);
+  }
+
+  _deleteClickHandler(index) {
+    return (evt) => {
+      evt.preventDefault();
+      this._callback.delete(index, this._id);
+      this.updateElement();
+    };
+  }
+
+  _textInputHandler(evt) {
+    evt.preventDefault();
+    this._newComment.text = evt.target.value;
+    this._textarea = evt.target.value;
   }
 }

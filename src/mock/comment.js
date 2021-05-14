@@ -1,5 +1,6 @@
 import {TEXTS, AUTHORS} from '../const';
 import {getRandomInteger, getRandomElement} from '../utils/common';
+import {nanoid} from 'nanoid';
 
 const generateEmoji = () => {
   const emoji = [
@@ -21,6 +22,7 @@ const generateDate = () => {
 
 export const generateComment = () => {
   return {
+    id: nanoid(),
     text: getRandomElement(TEXTS),
     emoji: generateEmoji(),
     author: getRandomElement(AUTHORS),

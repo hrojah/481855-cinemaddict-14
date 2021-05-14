@@ -2,6 +2,7 @@ import FilmCardView from '../view/film-card';
 import FilmPopupView from '../view/popup';
 import {render, remove, replace, RenderPosition} from '../utils/render';
 import {isEscPressed} from '../utils/common';
+import {UserAction, UpdateType} from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -9,11 +10,12 @@ const Mode = {
 };
 
 export default class Film {
-  constructor(siteBodyElement, filmListContainer, changeData, changeMode) {
+  constructor(siteBodyElement, filmListContainer, changeData, changeMode, filmsModel) {
     this._siteBodyElement = siteBodyElement;
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._filmsModel = filmsModel;
 
     this._filmComponent = null;
     this._popupComponent = null;
@@ -26,6 +28,7 @@ export default class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(film) {
@@ -52,6 +55,7 @@ export default class Film {
 
   _renderPopup() {
     this._changeMode();
+    this._filmsModel.setComments(this._film);
     const prevPopupComponent = this._popupComponent;
     this._popupComponent = new FilmPopupView(this._film);
     this._mode = Mode.POPUP;
@@ -62,6 +66,8 @@ export default class Film {
     this._popupComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._siteBodyElement.classList.add('hide-overflow');
     this._popupComponent.setClickHandler(this._closePopup);
+    this._popupComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._popupComponent.setInputHandler(this._handleTextAreaInput);
     document.addEventListener('keydown', this._escKeydownHandler);
 
     if (prevPopupComponent === null) {
@@ -93,6 +99,8 @@ export default class Film {
 
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._film,
@@ -105,6 +113,8 @@ export default class Film {
 
   _handleWatchedClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._film,
@@ -117,6 +127,8 @@ export default class Film {
 
   _handleWatchlistClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._film,
@@ -127,13 +139,31 @@ export default class Film {
     );
   }
 
-  _handleFormSubmit(film) {
-    this._changeData(film);
+  _handleFormSubmit(update, id) {
+    this._changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      update,
+      id,
+    );
   }
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._closePopup();
     }
+  }
+
+  _handleDeleteClick(index, id) {
+    this._changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.PATCH,
+      this._film.comments[index],
+      id,
+    );
+  }
+
+  _handleTextAreaInput(evt) {
+    this._popupComponent().querySelector('.film-details__comment-input').innerHTML = evt.target.value;
   }
 }
