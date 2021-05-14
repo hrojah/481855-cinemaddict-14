@@ -24,7 +24,6 @@ const createRankUserTemplate = (films) => {
 
 export default class RankUser extends AbstractView {
   constructor(films) {
-    debugger;
     super();
     this._films = films;
   }
