@@ -2,6 +2,7 @@ import SmartView from './smart';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {formatDate, genre, fullDate} from '../utils/films';
+import he from 'he';
 dayjs.extend(relativeTime);
 
 const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}, text) => {
@@ -19,7 +20,7 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
              <img src="${comment.emoji}" width="55" height="55" alt="emoji-smile">
            </span>
            <div>
-             <p class="film-details__comment-text">${comment.text}</p>
+             <p class="film-details__comment-text">${he.encode(comment.text)}</p>
              <p class="film-details__comment-info">
                <span class="film-details__comment-author">${comment.author}</span>
                <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>                <button class="film-details__comment-delete">Delete</button>
