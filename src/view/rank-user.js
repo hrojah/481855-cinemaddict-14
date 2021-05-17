@@ -1,8 +1,8 @@
 import AbstractView from './abstract';
 
-const createRank = (filter) => {
-  const history = filter.find((item) => item.name === 'History');
-  const filmsCount = history.count;
+const createRank = (films) => {
+  const filmsCount = films.length;
+
   switch (true) {
     case filmsCount === 0:
       return '';
@@ -15,20 +15,20 @@ const createRank = (filter) => {
   }
 };
 
-const createRankUserTemplate = (filter) => {
+const createRankUserTemplate = (films) => {
   return `<section class="header__profile profile">
-       ${createRank(filter)}
+       ${createRank(films)}
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>`;
 };
 
 export default class RankUser extends AbstractView {
-  constructor(filters) {
+  constructor(films) {
     super();
-    this._filters = filters;
+    this._films = films;
   }
 
   getTemplate() {
-    return createRankUserTemplate(this._filters);
+    return createRankUserTemplate(this._films);
   }
 }

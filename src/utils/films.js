@@ -34,7 +34,3 @@ export const genre = (genres) => {
 export const fullDate = (date) => {
   return dayjs(date).format('DD MMMM YYYY');
 };
-
-export const commentDate = (date) => {
-  return dayjs(date).format('YYYY/MM/DD hh:mm');
-};
