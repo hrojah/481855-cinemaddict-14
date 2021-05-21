@@ -4,11 +4,11 @@ import {filter} from '../utils/filter';
 import {FilterType, UpdateType} from '../const';
 
 export default class Filter {
-  constructor(filterContainer, filterModel, filmsModel) {
+  constructor(filterContainer, filterModel, filmsModel, stats) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
-
+    this._stats = stats;
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -21,9 +21,10 @@ export default class Filter {
   init() {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
-
     this._filterComponent = new MenuNav(filters, this._filterModel.getFilter());
+
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setStatsClickHandler(this._stats);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
@@ -72,5 +73,4 @@ export default class Filter {
       },
     ];
   }
-
 }

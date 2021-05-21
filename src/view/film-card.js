@@ -7,13 +7,21 @@ const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, pos
     return flag ? 'film-card__controls-item--active' : '';
   };
 
+  const getGenres = (genres) => {
+    return genres
+      .map((genre) => {
+        return `${genre}`;
+      }).join(' ');
+
+  };
+
   return `<article class="film-card">
           <h3 class="film-card__title">${name}</h3>
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${date(releaseDate)}</span>
             <span class="film-card__duration">${formatDate(runtime)}</span>
-            <span class="film-card__genre">${genres}</span>
+            <span class="film-card__genre">${getGenres(genres)}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description}</p>

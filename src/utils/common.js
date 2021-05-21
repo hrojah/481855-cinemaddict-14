@@ -28,3 +28,13 @@ export const getRandomArr = (min, max, arr) => {
 export const isEscPressed = (evt) => {
   return (evt.key === 'Escape' || evt.key === 'Esc');
 };
+
+export const getGenreCounts = (films, genreCounts) => {
+  for (let i = 0; i < films.length; i++) {
+    films[i].genres.forEach((genre) => {
+      if (!(genre in genreCounts)) {
+        genreCounts[genre] = 0;
+      } genreCounts[genre] = genreCounts[genre] + 1;
+    });
+  }
+};

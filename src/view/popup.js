@@ -6,7 +6,7 @@ import he from 'he';
 dayjs.extend(relativeTime);
 
 const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}, text) => {
-  const genresFilm = genres.split(' ');
+  // const genresFilm = genres.split(' ');
 
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
@@ -32,7 +32,7 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
   };
 
   const renderGenres = () => {
-    return genresFilm
+    return genres
       .map((genre) => {
         return `<span class="film-details__genre">${genre}</span>`;
       })
@@ -90,7 +90,7 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genre(genresFilm)}</td>
+              <td class="film-details__term">${genre(genres)}</td>
               <td class="film-details__cell">
                 ${renderGenres()}
             </tr>
@@ -199,6 +199,7 @@ export default class FilmPopup extends SmartView {
         this._formSubmitHandler(evt);
       }
     });
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textInputHandler);
   }
 
   _clickHandler(evt) {
@@ -250,6 +251,7 @@ export default class FilmPopup extends SmartView {
     this._callback.submit(this._newComment, this._id);
     this._textarea = '';
     this.updateElement();
+    this._newComment = {};
   }
 
   _favoriteToggleHandler(evt) {

@@ -14,7 +14,7 @@ const createMenuNavTemplate = (filterItems, currentFilterType) => {
     <div class="main-navigation__items">
       ${filterItemsTemplate}
     </div>
-    <a href="#stats" class="main-navigation__additional">Stats</a>
+    <a href="#stats" id="stats" class="main-navigation__additional">Stats</a>
   </nav>`;
 };
 
@@ -25,6 +25,7 @@ export default class MenuNav extends AbstractView {
     this._currentFilter = currentFilterType;
 
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this._menuClickHandler = this._menuClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -40,6 +41,18 @@ export default class MenuNav extends AbstractView {
     this._callback.filterTypeChange = callback;
     this.getElement().querySelectorAll('.main-navigation__item').forEach((item) => {
       item.addEventListener('click', this._filterTypeChangeHandler);
+    });
+  }
+
+  _menuClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.menuClick(evt.target.id);
+  }
+
+  setStatsClickHandler(callback) {
+    this._callback.menuClick = callback;
+    this.getElement().querySelectorAll('a').forEach((item) => {
+      item.addEventListener('click', this._menuClickHandler);
     });
   }
 }

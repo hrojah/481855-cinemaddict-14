@@ -29,6 +29,11 @@ const generateDate = () => {
   return new Date(date);
 };
 
+const generateWatchingDate = () => {
+  const date = getRandomInteger(31536000000, Date.now());
+  return new Date(date);
+};
+
 const generateRuntime = () => {
   return getRandomInteger(MIN_DURATION, MAX_DURATION);
 };
@@ -48,9 +53,10 @@ export const generateFilm = () => {
     writers: getRandomArr(MIN_ELEMENTS, COUNT_ELEMENTS, WRITERS).join(', '),
     actors: getRandomArr(MIN_ELEMENTS, MAX_ELEMENTS, ACTORS).join(', '),
     releaseDate: generateDate(),
+    watchingDate: generateWatchingDate(),
     runtime: generateRuntime(),
     country: getRandomElement(COUNTRY),
-    genres: getRandomArr(MIN_ELEMENTS,COUNT_ELEMENTS, GENRES).join(' '),
+    genres: getRandomArr(MIN_ELEMENTS,COUNT_ELEMENTS, GENRES),
     description: generateDescription(),
     ageRating: generateAgeRating(),
     isWatchList: Boolean(getRandomInteger(0, 1)),

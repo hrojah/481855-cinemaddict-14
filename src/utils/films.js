@@ -27,6 +27,16 @@ export const formatDate = (runtime) => {
   return hours + 'h' + ' ' + minutesLeft + 'm';
 };
 
+export const formatDuration = (runtime) => {
+  const hours = Math.floor(runtime / MINUTES_IN_HOUR);
+  const minutesLeft = runtime - (hours * MINUTES_IN_HOUR);
+
+  return {
+    hours: hours,
+    minutes: minutesLeft,
+  };
+};
+
 export const genre = (genres) => {
   return genres.length > 1 ? 'Genres' : 'Genre';
 };
