@@ -38,7 +38,3 @@ export const getGenreCounts = (films, genreCounts) => {
     });
   }
 };
-
-// export const qwe = (films) => {
-//   films.reduce(())
-// };
