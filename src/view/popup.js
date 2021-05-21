@@ -6,7 +6,6 @@ import he from 'he';
 dayjs.extend(relativeTime);
 
 const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}, text) => {
-  // const genresFilm = genres.split(' ');
 
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';

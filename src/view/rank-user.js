@@ -1,19 +1,5 @@
 import AbstractView from './abstract';
 import {createRank} from '../utils/rank';
-// const createRank = (films) => {
-//   const filmsCount = films.length;
-//
-//   switch (true) {
-//     case filmsCount === 0:
-//       return '';
-//     case filmsCount >= 0 && filmsCount <= 10:
-//       return '<p class="profile__rating">Novice</p>';
-//     case filmsCount >= 10 && filmsCount <= 20:
-//       return '<p class="profile__rating">Fun</p>';
-//     case filmsCount > 20:
-//       return '<p class="profile__rating">Movie Buff</p>';
-//   }
-// };
 
 const createRankUserTemplate = (films) => {
   return `<section class="header__profile profile">
