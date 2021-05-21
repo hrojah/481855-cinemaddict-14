@@ -79,7 +79,6 @@ const renderChart = (ctx, films, dateFrom, dateTo) => {
 };
 
 const createStatisticTemplate = (data, int) => {
-  debugger;
   const {films, dateFrom, dateTo} = data;
 
   const filteredFilms = films.slice().filter((film) => dayjs(film.watchingDate).isBetween(dateFrom, dateTo));
@@ -89,7 +88,7 @@ const createStatisticTemplate = (data, int) => {
   getGenreCounts(filteredFilms, genreCounts);
 
   const getTopGenre = (filteredFilms) => {
-    if (filteredFilms.length === 0) {
+    if (!filteredFilms.length) {
       return '';
     }
 
@@ -156,7 +155,6 @@ const createStatisticTemplate = (data, int) => {
 
 export default class Statistics extends SmartView {
   constructor(films) {
-    debugger;
     super();
     this._data = {
       films,
