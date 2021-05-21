@@ -78,7 +78,8 @@ const renderChart = (ctx, films, dateFrom, dateTo) => {
   });
 };
 
-const createStatisticTemplate = (data, interval) => {
+const createStatisticTemplate = (data, int) => {
+  debugger;
   const {films, dateFrom, dateTo} = data;
 
   const filteredFilms = films.slice().filter((film) => dayjs(film.watchingDate).isBetween(dateFrom, dateTo));
@@ -116,19 +117,19 @@ const createStatisticTemplate = (data, interval) => {
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${interval === interval.ALL_TIME ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${int === interval.ALL_TIME ? 'checked' : ''}>
       <label for="statistic-all-time" class="statistic__filters-label" id="all-time">All time</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${interval === interval.TODAY ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${int === interval.TODAY ? 'checked' : ''}>
       <label for="statistic-today" class="statistic__filters-label" id="today">Today</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${interval === interval.WEEK ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${int === interval.WEEK ? 'checked' : ''}>
       <label for="statistic-week" class="statistic__filters-label" id="week">Week</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${interval === interval.MONTH ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${int === interval.MONTH ? 'checked' : ''}>
       <label for="statistic-month" class="statistic__filters-label" id="month">Month</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${interval === interval.YEAR ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${int === interval.YEAR ? 'checked' : ''}>
       <label for="statistic-year" class="statistic__filters-label" id="year">Year</label>
     </form>
 
@@ -155,6 +156,7 @@ const createStatisticTemplate = (data, interval) => {
 
 export default class Statistics extends SmartView {
   constructor(films) {
+    debugger;
     super();
     this._data = {
       films,

@@ -30,7 +30,7 @@ const generateDate = () => {
 };
 
 const generateWatchingDate = () => {
-  const date = getRandomInteger(31536000000, Date.now());
+  const date = getRandomInteger(1590039995000, Date.now());
   return new Date(date);
 };
 
