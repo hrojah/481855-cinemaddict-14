@@ -105,7 +105,13 @@ export default class Film {
         {},
         this._film,
         {
-          isFavorite: !this._film.isFavorite,
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isFavorite: !this._film.userDetails.isFavorite,
+            },
+          ),
         },
       ),
     );
@@ -119,7 +125,13 @@ export default class Film {
         {},
         this._film,
         {
-          isWatched: !this._film.isWatched,
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isWatched: !this._film.userDetails.isWatched,
+            },
+          ),
         },
       ),
     );
@@ -133,7 +145,13 @@ export default class Film {
         {},
         this._film,
         {
-          isWatchList: !this._film.isWatchList,
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isWatchList: !this._film.userDetails.isWatchList,
+            },
+          ),
         },
       ),
     );

@@ -29,12 +29,14 @@ export const isEscPressed = (evt) => {
   return (evt.key === 'Escape' || evt.key === 'Esc');
 };
 
-export const getGenreCounts = (films, genreCounts) => {
-  for (let i = 0; i < films.length; i++) {
-    films[i].genres.forEach((genre) => {
-      if (!(genre in genreCounts)) {
-        genreCounts[genre] = 0;
-      } genreCounts[genre] = genreCounts[genre] + 1;
+export const getGenreCounts = (films) => {
+  return films.reduce((acc, film) => {
+    film.filmInfo.genres.forEach((genre) => {
+      if (!acc[genre]) {
+        acc[genre] = 0;
+      }
+      acc[genre] += 1;
     });
-  }
+    return acc;
+  },{});
 };

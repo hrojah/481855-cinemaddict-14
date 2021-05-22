@@ -2,7 +2,7 @@ import AbstractView from './abstract';
 import {date} from '../utils/films';
 import {formatDate} from '../utils/films';
 
-const createFilmCardTemplate = ({name, rating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}) => {
+const createFilmCardTemplate = ({filmInfo: {release: {releaseDate}, name, rating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments}) => {
   const isButtonActive = (flag) => {
     return flag ? 'film-card__controls-item--active' : '';
   };

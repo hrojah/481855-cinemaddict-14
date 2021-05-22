@@ -5,7 +5,7 @@ import {formatDate, genre, fullDate} from '../utils/films';
 import he from 'he';
 dayjs.extend(relativeTime);
 
-const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}, text) => {
+const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, originName, rating, director, writers, actors, ageRating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments}, text) => {
 
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
@@ -36,6 +36,22 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
         return `<span class="film-details__genre">${genre}</span>`;
       })
       .join(' ');
+  };
+
+  const renderActors = () => {
+    return actors
+      .map((actor) => {
+        return `${actor}`;
+      })
+      .join(', ');
+  };
+
+  const renderWriters = () => {
+    return writers
+      .map((writer) => {
+        return `${writer}`;
+      })
+      .join(', ');
   };
 
   return `<section class="film-details">
@@ -70,11 +86,11 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${renderWriters()}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${renderActors()}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
@@ -256,21 +272,33 @@ export default class FilmPopup extends SmartView {
   _favoriteToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      isFavorite: !this._film.isFavorite,
+      userDetails: {
+        isFavorite: !this._film.userDetails.isFavorite,
+        isWatched: this._film.userDetails.isWatched,
+        isWatchList: this._film.userDetails.isWatchList,
+      },
     });
   }
 
   _watchedToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      isWatched: !this._film.isWatched,
+      userDetails: {
+        isFavorite: this._film.userDetails.isFavorite,
+        isWatchList: this._film.userDetails.isWatchList,
+        isWatched: !this._film.userDetails.isWatched,
+      },
     });
   }
 
   _watchListToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      isWatchList: !this._film.isWatchList,
+      userDetails: {
+        isFavorite: this._film.userDetails.isFavorite,
+        isWatched: this._film.userDetails.isWatched,
+        isWatchList: !this._film.userDetails.isWatchList,
+      },
     });
   }
 

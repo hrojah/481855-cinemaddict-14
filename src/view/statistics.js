@@ -11,12 +11,11 @@ import {getGenreCounts} from '../utils/common';
 dayjs.extend(isBetween);
 
 const renderChart = (ctx, films, dateFrom, dateTo) => {
-  const filteredFilms = films.slice().filter((film) => dayjs(film.watchingDate).isBetween(dateFrom, dateTo));
-  const genreCounts = {};
+  const filteredFilms = films.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dateFrom, dateTo));
 
-  getGenreCounts(filteredFilms, genreCounts);
-  const sortedValues = Object.values(genreCounts).sort((itemA, itemB) => itemB - itemA);
-  const sortedKeys = Object.keys(genreCounts).sort((genreA, genreB) => genreCounts[genreB] - genreCounts[genreA]);
+  const genres = getGenreCounts(filteredFilms);
+  const sortedValues = Object.values(genres).sort((itemA, itemB) => itemB - itemA);
+  const sortedKeys = Object.keys(genres).sort((genreA, genreB) => genres[genreB] - genres[genreA]);
 
   ctx.height = BAR_HEIGHT * sortedKeys.length;
 
@@ -81,25 +80,24 @@ const renderChart = (ctx, films, dateFrom, dateTo) => {
 const createStatisticTemplate = (data, int) => {
   const {films, dateFrom, dateTo} = data;
 
-  const filteredFilms = films.slice().filter((film) => dayjs(film.watchingDate).isBetween(dateFrom, dateTo));
+  const filteredFilms = films.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dateFrom, dateTo));
 
-  const genreCounts = {};
-
-  getGenreCounts(filteredFilms, genreCounts);
+  const genres = getGenreCounts(filteredFilms);
 
   const getTopGenre = (filteredFilms) => {
+
     if (!filteredFilms.length) {
       return '';
     }
 
-    const sortedKeys = Object.keys(genreCounts).sort((genreA, genreB) => genreCounts[genreB]  - genreCounts[genreA]);
+    const sortedKeys = Object.keys(genres).sort((genreA, genreB) => genres[genreB]  - genres[genreA]);
     return sortedKeys[0];
   };
 
   const getDuration = (films) => {
     let duration = 0;
     for (let i = 0; i < films.length; i++) {
-      duration += films[i].runtime;
+      duration += films[i].filmInfo.runtime;
     }
     return formatDuration(duration);
   };

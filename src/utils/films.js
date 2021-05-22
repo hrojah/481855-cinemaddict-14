@@ -6,7 +6,7 @@ export const date = (date) => {
 };
 
 export const topRatedFilms = (films) => {
-  return films.slice().sort((a, b) => b.rating - a.rating);
+  return films.slice().sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
 };
 
 export const mostCommentsFilms = (films) => {
@@ -14,11 +14,11 @@ export const mostCommentsFilms = (films) => {
 };
 
 export const sortRating = (filmA, filmB) => {
-  return filmB.rating - filmA.rating;
+  return filmB.filmInfo.rating - filmA.filmInfo.rating;
 };
 
 export const sortDate = (filmA, filmB) => {
-  return filmB.releaseDate - filmA.releaseDate;
+  return filmB.filmInfo.release.releaseDate - filmA.filmInfo.release.releaseDate;
 };
 
 export const formatDate = (runtime) => {

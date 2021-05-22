@@ -34,7 +34,7 @@ export default class MenuNav extends AbstractView {
 
   _filterTypeChangeHandler(evt) {
     evt.preventDefault();
-    this._callback.filterTypeChange(evt.target.id);
+    this._callback.filterTypeChange(evt.target.closest('.main-navigation__item ').id);
   }
 
   setFilterTypeChangeHandler(callback) {
