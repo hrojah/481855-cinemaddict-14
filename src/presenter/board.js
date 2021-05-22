@@ -36,13 +36,20 @@ export default class Board {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
     this._cardContainerElement = this._filmListComponent.getElement().querySelector('.films-list__container');
   }
 
   init() {
     this._renderBoard();
+    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+  }
+
+  destroy() {
+    this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+    this._currentSortType = SortType.DEFAULT;
   }
 
   _getFilms() {
@@ -58,7 +65,6 @@ export default class Board {
     }
 
     return filteredFilms;
-
   }
 
   _renderSort() {
@@ -195,6 +201,7 @@ export default class Board {
         this._renderBoard();
         break;
       case UpdateType.MAJOR:
+        // remove(this._)
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
     }
