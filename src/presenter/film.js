@@ -10,12 +10,13 @@ const Mode = {
 };
 
 export default class Film {
-  constructor(siteBodyElement, filmListContainer, changeData, changeMode, filmsModel) {
+  constructor(siteBodyElement, filmListContainer, changeData, changeMode, filmsModel, api) {
     this._siteBodyElement = siteBodyElement;
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._filmsModel = filmsModel;
+    this._api = api;
 
     this._filmComponent = null;
     this._popupComponent = null;
@@ -29,6 +30,7 @@ export default class Film {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._setComments = this._setComments.bind(this);
   }
 
   init(film) {
@@ -48,16 +50,30 @@ export default class Film {
 
     if (this._mode === Mode.DEFAULT || this._mode === Mode.POPUP) {
       replace(this._filmComponent, prevFilmComponent);
+      if (this._mode === Mode.POPUP) {
+        this._renderPopup();
+      }
     }
 
     remove(prevFilmComponent);
   }
 
+  _setComments() {
+    this._api.getComments(this._film)
+      .then((comments) => {
+        this._filmsModel.setComments(comments, this._film);
+        this._popupComponent.updateElement();
+      })
+      .catch(() => {
+        this._filmsModel.setComments([], this._film);
+      });
+  }
+
   _renderPopup() {
+    this._setComments();
     this._changeMode();
-    this._filmsModel.setComments(this._film);
     const prevPopupComponent = this._popupComponent;
-    this._popupComponent = new FilmPopupView(this._film);
+    this._popupComponent = new FilmPopupView(this._film, this._changeData);
     this._mode = Mode.POPUP;
 
     this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -114,6 +130,7 @@ export default class Film {
           ),
         },
       ),
+      this._film.id,
     );
   }
 

@@ -3,10 +3,10 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {formatDate, genre, fullDate} from '../utils/films';
 import he from 'he';
+import {UpdateType, UserAction} from '../const';
 dayjs.extend(relativeTime);
 
 const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, originName, rating, director, writers, actors, ageRating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments}, text) => {
-
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
   };
@@ -171,9 +171,10 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
 };
 
 export default class FilmPopup extends SmartView {
-  constructor(film) {
+  constructor(film, changeData) {
     super();
     this._film = film;
+    this._changeData = changeData;
     this._id = this._film.id;
     this._textarea =  '';
     this._newComment = {};
@@ -271,35 +272,68 @@ export default class FilmPopup extends SmartView {
 
   _favoriteToggleHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      userDetails: {
-        isFavorite: !this._film.userDetails.isFavorite,
-        isWatched: this._film.userDetails.isWatched,
-        isWatchList: this._film.userDetails.isWatchList,
-      },
-    });
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isFavorite: !this._film.userDetails.isFavorite,
+            },
+          ),
+        },
+      ),
+    );
+    this.updateElement();
   }
 
   _watchedToggleHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      userDetails: {
-        isFavorite: this._film.userDetails.isFavorite,
-        isWatchList: this._film.userDetails.isWatchList,
-        isWatched: !this._film.userDetails.isWatched,
-      },
-    });
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isWatched: !this._film.userDetails.isWatched,
+            },
+          ),
+        },
+      ),
+    );
+    this.updateElement();
   }
 
   _watchListToggleHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      userDetails: {
-        isFavorite: this._film.userDetails.isFavorite,
-        isWatched: this._film.userDetails.isWatched,
-        isWatchList: !this._film.userDetails.isWatchList,
-      },
-    });
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isWatchList: !this._film.userDetails.isWatchList,
+            },
+          ),
+        },
+      ),
+    );
+    this.updateElement();
   }
 
   _emojiClickHandler(evt) {

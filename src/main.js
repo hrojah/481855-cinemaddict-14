@@ -31,7 +31,6 @@ render(siteHeaderElement, new RankUserView(filter[FilterType.HISTORY](filmsModel
 
 filterPresenter.init();
 boardPresenter.init();
-
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
@@ -39,5 +38,6 @@ api.getFilms()
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);
   });
+
 
 render(footerStatisticsElement, new AmountFilmsView(), RenderPosition.BEFOREEND);

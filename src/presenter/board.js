@@ -81,19 +81,19 @@ export default class Board {
   }
 
   _renderFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel, this._api);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderTopRatedFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel, this._api);
     filmPresenter.init(film);
     this._filmPresenterTopRated[film.id] = filmPresenter;
   }
 
   _renderMostCommentedFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel, this._api);
     filmPresenter.init(film);
     this._filmPresenterMostCommented[film.id] = filmPresenter;
   }
@@ -200,10 +200,14 @@ export default class Board {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._filmsModel.addComment(updateType, update, id);
+        this._api.updateComments(id, update).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
         break;
       case UserAction.DELETE_COMMENT:
-        this._filmsModel.deleteComment(updateType, update, id);
+        this._api.deleteComment(update.id).then(() => {
+          this._filmsModel.deleteComment(updateType, update, id);
+        });
         break;
     }
   }

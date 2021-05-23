@@ -13,8 +13,10 @@ export default class Films extends Observer {
     this._notify(updateType);
   }
 
-  setComments(film) {
-    this._comments = film.comments.map((comment) => ({...comment}));
+  setComments(comments, film) {
+    this._film = film;
+    this._film.comments = comments.map((comment) => ({...comment}));
+    this._notify(this._film);
   }
 
   getFilms() {
@@ -56,110 +58,83 @@ export default class Films extends Observer {
   }
 
   static adaptToClient(film) {
-    const adaptedFilm = Object.assign(
-      {},
-      film,
-      {
-        userDetails: Object.assign(
-          {},
-          film.user_details,
-          {
-            isFavorite: film.user_details.favorite,
-            isWatched: film.user_details.already_watched,
-            isWatchList: film.user_details.watchlist,
-            watchingDate: film.user_details.watching_date,
+    return {
+      id: film.id,
+      comments: film.comments,
+      filmInfo:
+        {
+          ageRating: film.film_info.age_rating,
+          originName: film.film_info.alternative_title,
+          name: film.film_info.title,
+          genres: film.film_info.genre,
+          rating: film.film_info.total_rating,
+          runtime: film.film_info.runtime,
+          actors: film.film_info.actors,
+          writers: film.film_info.writers,
+          poster: film.film_info.poster,
+          director: film.film_info.director,
+          description: film.film_info.description,
+          release: {
+            releaseDate: new Date(film.film_info.release.date),
+            country: film.film_info.release.release_country,
           },
-        ),
-        filmInfo: Object.assign(
-          {},
-          film.film_info,
-          {
-            ageRating: film.film_info.age_rating,
-            originName: film.film_info.alternative_title,
-            name: film.film_info.title,
-            genres: film.film_info.genre,
-            rating: film.film_info.total_rating,
-            release: Object.assign(
-              {},
-              film.film_info.release,
-              {
-                releaseDate: new Date(film.film_info.release.date),
-                country: film.film_info.release.release_country,
-              },
-            ),
-          },
-        ),
-      },
-    );
+        },
+      userDetails:
+        {
+          isFavorite: film.user_details.favorite,
+          isWatched: film.user_details.already_watched,
+          isWatchList: film.user_details.watchlist,
+          watchingDate: new Date(film.user_details.watching_date),
+        },
+    };
+  }
 
-    delete adaptedFilm.film_info;
-    delete adaptedFilm.user_details;
-    delete adaptedFilm.userDetails.favorite;
-    delete adaptedFilm.userDetails.already_watched;
-    delete adaptedFilm.userDetails.watchlist;
-    delete adaptedFilm.userDetails.watching_date;
-    delete adaptedFilm.filmInfo.age_rating;
-    delete adaptedFilm.filmInfo.alternative_title;
-    delete adaptedFilm.filmInfo.title;
-    delete adaptedFilm.filmInfo.genre;
-    delete adaptedFilm.filmInfo.total_rating;
-    delete adaptedFilm.filmInfo.release.date;
-    delete adaptedFilm.filmInfo.release.release_country;
+  static adaptToClientComment(comment) {
+    return {
+      author: comment.author,
+      id: comment.id,
+      text: comment.comment,
+      emoji: `./images/emoji/${comment.emotion}.png`,
+      date: new Date(comment.date),
+    };
+  }
 
-    return adaptedFilm;
+  static adaptToServerComment(comment) {
+    return {
+      comment: comment.text,
+      emotion: comment.emoji,
+    };
   }
 
   static adaptToServer(film) {
-    const adaptedFilm = Object.assign(
-      {},
-      film,
-      {
-        'user_details': Object.assign(
-          {},
-          film.userDetails,
-          {
-            favorite: film.userDetails.isFavorite,
-            'already_watched': film.userDetails.isWatched,
-            watchlist: film.userDetails.isWatchList,
-            'watching_date': film.userDetails.watchingDate,
+    return {
+      id: film.id,
+      comments: film.comments,
+      film_info:
+        {
+          age_rating: film.filmInfo.ageRating,
+          alternative_title: film.filmInfo.originName,
+          title: film.filmInfo.name,
+          genre: film.filmInfo.genres,
+          total_rating: film.filmInfo.rating,
+          runtime: film.filmInfo.runtime,
+          actors: film.filmInfo.actors,
+          writers: film.filmInfo.writers,
+          poster: film.filmInfo.poster,
+          director: film.filmInfo.director,
+          description: film.filmInfo.description,
+          release: {
+            date: film.filmInfo.release.releaseDate.toISOString(),
+            release_country: film.filmInfo.release.country,
           },
-        ),
-        'film_info': Object.assign(
-          {},
-          film.filmInfo,
-          {
-            'age_rating': film.filmInfo.ageRating,
-            'alternative_title': film.filmInfo.originName,
-            title: film.filmInfo.name,
-            genre: film.filmInfo.genres,
-            'total_rating': film.filmInfo.rating,
-            release: Object.assign(
-              {},
-              film.filmInfo.release,
-              {
-                date: film.filmInfo.release.releaseDate.toISOString(),
-                'release_country': film.filmInfo.release.country,
-              },
-            ),
-          },
-        ),
-      },
-    );
-
-    delete adaptedFilm.filmInfo;
-    delete adaptedFilm.userDetails;
-    delete adaptedFilm.user_details.isFavorite;
-    delete adaptedFilm.user_details.isWatched;
-    delete adaptedFilm.user_details.isWatchList;
-    delete adaptedFilm.user_details.watchingDate;
-    delete adaptedFilm.film_info.ageRating;
-    delete adaptedFilm.film_info.originName;
-    delete adaptedFilm.film_info.name;
-    delete adaptedFilm.film_info.genres;
-    delete adaptedFilm.film_info.rating;
-    delete adaptedFilm.film_info.release.releaseDate;
-    delete adaptedFilm.filmInfo.release.country;
-
-    return adaptedFilm;
+        },
+      user_details:
+        {
+          favorite: film.userDetails.isFavorite,
+          already_watched: film.userDetails.isWatched,
+          watchlist: film.userDetails.isWatchList,
+          watching_date: film.userDetails.watchingDate.toISOString(),
+        },
+    };
   }
 }
