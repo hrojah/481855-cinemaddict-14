@@ -5,6 +5,7 @@ import ShowMoreButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated';
 import MostCommentedView from '../view/most-commented';
 import ListEmptyView from '../view/list-empty';
+import LoadingView from '../view/loading';
 import {remove, render, RenderPosition} from '../utils/render';
 import {DISPLAYED_MOVIES, FILM_COUNT_PER_STEP, UpdateType, UserAction, SortType} from '../const';
 import {mostCommentsFilms, topRatedFilms, sortDate, sortRating} from '../utils/films';
@@ -12,11 +13,12 @@ import FilmPresenter from './film';
 import {filter} from '../utils/filter';
 
 export default class Board {
-  constructor(siteBodyElement, boardContainer, filmsModel, filterModel) {
+  constructor(siteBodyElement, boardContainer, filmsModel, filterModel, api) {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._bodyComponent = siteBodyElement;
     this._boardContainer = boardContainer;
+    this._api = api;
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
     this._filmPresenter = {};
     this._filmPresenterTopRated = {};
@@ -24,11 +26,13 @@ export default class Board {
     this._currentSortType = SortType.DEFAULT;
     this._sortComponent = null;
     this._showMoreButtonComponent = null;
+    this._isLoading = true;
 
 
     this._boardComponent = new BoardView();
     this._filmListComponent = new FilmListView();
     this._listEmptyComponent = new ListEmptyView();
+    this._loadingComponent = new LoadingView();
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -77,19 +81,19 @@ export default class Board {
   }
 
   _renderFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel, this._api);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderTopRatedFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel, this._api);
     filmPresenter.init(film);
     this._filmPresenterTopRated[film.id] = filmPresenter;
   }
 
   _renderMostCommentedFilm(filmListElement, film) {
-    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel);
+    const filmPresenter = new FilmPresenter(this._bodyComponent, filmListElement, this._handleViewAction, this._handleModeChange, this._filmsModel, this._api);
     filmPresenter.init(film);
     this._filmPresenterMostCommented[film.id] = filmPresenter;
   }
@@ -125,6 +129,11 @@ export default class Board {
   }
 
   _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const films = this._getFilms();
     const filmCount = films.length;
 
@@ -153,7 +162,14 @@ export default class Board {
     this._topRatedFilmsContainer = this._topRatedContainer.getElement().querySelector('.top-rated');
     render(this._boardComponent, this._topRatedContainer, RenderPosition.BEFOREEND);
 
-    for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+    if (this._topRatedFilms.length > DISPLAYED_MOVIES) {
+      for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+        this._renderTopRatedFilm(this._topRatedFilmsContainer, this._topRatedFilms[i]);
+      }
+      return;
+    }
+
+    for (let i = 0; i < this._topRatedFilms.length; i++) {
       this._renderTopRatedFilm(this._topRatedFilmsContainer, this._topRatedFilms[i]);
     }
   }
@@ -164,7 +180,14 @@ export default class Board {
     this._mostCommentedFilmsContainer = this._mostCommentedContainer.getElement().querySelector('.most-commented');
     render(this._boardComponent, this._mostCommentedContainer, RenderPosition.BEFOREEND);
 
-    for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+    if (this._mostCommentedFilms.length > DISPLAYED_MOVIES) {
+      for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+        this._renderMostCommentedFilm(this._mostCommentedFilmsContainer, this._mostCommentedFilms[i]);
+      }
+      return;
+    }
+
+    for (let i = 0; i < this._mostCommentedFilms.length; i++) {
       this._renderMostCommentedFilm(this._mostCommentedFilmsContainer, this._mostCommentedFilms[i]);
     }
   }
@@ -172,13 +195,19 @@ export default class Board {
   _handleViewAction(actionType, updateType, update, id) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilm(updateType, update);
+        this._api.updateFilm(update).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
         break;
       case UserAction.ADD_COMMENT:
-        this._filmsModel.addComment(updateType, update, id);
+        this._api.updateComments(id, update).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
         break;
       case UserAction.DELETE_COMMENT:
-        this._filmsModel.deleteComment(updateType, update, id);
+        this._api.deleteComment(update.id).then(() => {
+          this._filmsModel.deleteComment(updateType, update, id);
+        });
         break;
     }
   }
@@ -201,9 +230,14 @@ export default class Board {
         this._renderBoard();
         break;
       case UpdateType.MAJOR:
-        // remove(this._)
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderBoard();
+        break;
     }
   }
 
@@ -232,6 +266,7 @@ export default class Board {
 
     remove(this._sortComponent);
     remove(this._listEmptyComponent);
+    remove(this._loadingComponent);
     remove(this._showMoreButtonComponent);
     remove(this._topRatedContainer);
     remove(this._mostCommentedContainer);
@@ -244,5 +279,9 @@ export default class Board {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
+  }
+
+  _renderLoading() {
+    render(this._boardContainer, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 }

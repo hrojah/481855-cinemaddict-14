@@ -3,10 +3,10 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {formatDate, genre, fullDate} from '../utils/films';
 import he from 'he';
+import {UpdateType, UserAction} from '../const';
 dayjs.extend(relativeTime);
 
-const createPopupTemplate = ({name, originName, rating, director, writers, actors, country, ageRating, releaseDate, runtime, genres, poster, description, comments, isFavorite, isWatched, isWatchList}, text) => {
-
+const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, originName, rating, director, writers, actors, ageRating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments}, text) => {
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
   };
@@ -36,6 +36,22 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
         return `<span class="film-details__genre">${genre}</span>`;
       })
       .join(' ');
+  };
+
+  const renderActors = () => {
+    return actors
+      .map((actor) => {
+        return `${actor}`;
+      })
+      .join(', ');
+  };
+
+  const renderWriters = () => {
+    return writers
+      .map((writer) => {
+        return `${writer}`;
+      })
+      .join(', ');
   };
 
   return `<section class="film-details">
@@ -70,11 +86,11 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${renderWriters()}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${renderActors()}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
@@ -155,9 +171,10 @@ const createPopupTemplate = ({name, originName, rating, director, writers, actor
 };
 
 export default class FilmPopup extends SmartView {
-  constructor(film) {
+  constructor(film, changeData) {
     super();
     this._film = film;
+    this._changeData = changeData;
     this._id = this._film.id;
     this._textarea =  '';
     this._newComment = {};
@@ -255,23 +272,68 @@ export default class FilmPopup extends SmartView {
 
   _favoriteToggleHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      isFavorite: !this._film.isFavorite,
-    });
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isFavorite: !this._film.userDetails.isFavorite,
+            },
+          ),
+        },
+      ),
+    );
+    this.updateElement();
   }
 
   _watchedToggleHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      isWatched: !this._film.isWatched,
-    });
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isWatched: !this._film.userDetails.isWatched,
+            },
+          ),
+        },
+      ),
+    );
+    this.updateElement();
   }
 
   _watchListToggleHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      isWatchList: !this._film.isWatchList,
-    });
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails: Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isWatchList: !this._film.userDetails.isWatchList,
+            },
+          ),
+        },
+      ),
+    );
+    this.updateElement();
   }
 
   _emojiClickHandler(evt) {
