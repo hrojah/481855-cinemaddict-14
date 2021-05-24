@@ -10,13 +10,16 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
   };
-
   const renderComments = () => {
     return comments
       .map((comment) => {
+        if (!comment.text || !comment.author || !comment.date || !comment.emoji) {
+          return;
+        }
+
         return `<li class="film-details__comment">
            <span class="film-details__comment-emoji">
-             <img src="${comment.emoji}" width="55" height="55" alt="emoji-smile">
+             <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
            </span>
            <div>
              <p class="film-details__comment-text">${he.encode(comment.text)}</p>
@@ -289,7 +292,6 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
-    this.updateElement();
   }
 
   _watchedToggleHandler(evt) {
@@ -311,7 +313,6 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
-    this.updateElement();
   }
 
   _watchListToggleHandler(evt) {
@@ -333,12 +334,11 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
-    this.updateElement();
   }
 
   _emojiClickHandler(evt) {
     evt.preventDefault();
-    this._newComment.emoji = `images/emoji/${evt.target.value}.png`;
+    this._newComment.emoji = `${evt.target.value}`;
     this.getElement().querySelector('.film-details__add-emoji-label').innerHTML = `<img src="images/emoji/${evt.target.value}.png" width="55" height="55" alt="emoji-smile">`;
   }
 

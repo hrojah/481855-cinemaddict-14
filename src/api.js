@@ -4,6 +4,7 @@ const Method = {
   GET: 'GET',
   PUT: 'PUT',
   DELETE: 'DELETE',
+  POST: 'POST',
 };
 
 const SuccessHTTPStatusRange = {
@@ -40,15 +41,16 @@ export default class Api {
       .then(FilmsModel.adaptToClient);
   }
 
-  updateComments(id, comments) {
+  addComments(id, comments) {
     return this._load({
       url: `/comments/${id}`,
-      method: Method.PUT,
+      method: Method.POST,
       body: JSON.stringify(FilmsModel.adaptToServerComment(comments)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJSON)
-      .then(FilmsModel.adaptToClient);
+      .then(FilmsModel.adaptFilmToClient)
+      .then((film) => film.comments.map(FilmsModel.adaptToClientComment));
   }
 
   deleteComment(id) {

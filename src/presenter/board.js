@@ -160,17 +160,19 @@ export default class Board {
     this._topRatedFilms = topRatedFilms(this._getFilms());
     this._topRatedContainer = new TopRatedView();
     this._topRatedFilmsContainer = this._topRatedContainer.getElement().querySelector('.top-rated');
-    render(this._boardComponent, this._topRatedContainer, RenderPosition.BEFOREEND);
+    if (this._topRatedFilms.length) {
+      render(this._boardComponent, this._topRatedContainer, RenderPosition.BEFOREEND);
 
-    if (this._topRatedFilms.length > DISPLAYED_MOVIES) {
-      for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+      if (this._topRatedFilms.length > DISPLAYED_MOVIES) {
+        for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+          this._renderTopRatedFilm(this._topRatedFilmsContainer, this._topRatedFilms[i]);
+        }
+        return;
+      }
+
+      for (let i = 0; i < this._topRatedFilms.length; i++) {
         this._renderTopRatedFilm(this._topRatedFilmsContainer, this._topRatedFilms[i]);
       }
-      return;
-    }
-
-    for (let i = 0; i < this._topRatedFilms.length; i++) {
-      this._renderTopRatedFilm(this._topRatedFilmsContainer, this._topRatedFilms[i]);
     }
   }
 
@@ -178,17 +180,19 @@ export default class Board {
     this._mostCommentedFilms = mostCommentsFilms(this._getFilms());
     this._mostCommentedContainer = new MostCommentedView();
     this._mostCommentedFilmsContainer = this._mostCommentedContainer.getElement().querySelector('.most-commented');
-    render(this._boardComponent, this._mostCommentedContainer, RenderPosition.BEFOREEND);
+    if (this._mostCommentedFilms.length) {
+      render(this._boardComponent, this._mostCommentedContainer, RenderPosition.BEFOREEND);
 
-    if (this._mostCommentedFilms.length > DISPLAYED_MOVIES) {
-      for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+      if (this._mostCommentedFilms.length > DISPLAYED_MOVIES) {
+        for (let i = 0; i < DISPLAYED_MOVIES; i++) {
+          this._renderMostCommentedFilm(this._mostCommentedFilmsContainer, this._mostCommentedFilms[i]);
+        }
+        return;
+      }
+
+      for (let i = 0; i < this._mostCommentedFilms.length; i++) {
         this._renderMostCommentedFilm(this._mostCommentedFilmsContainer, this._mostCommentedFilms[i]);
       }
-      return;
-    }
-
-    for (let i = 0; i < this._mostCommentedFilms.length; i++) {
-      this._renderMostCommentedFilm(this._mostCommentedFilmsContainer, this._mostCommentedFilms[i]);
     }
   }
 
@@ -200,8 +204,8 @@ export default class Board {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._api.updateComments(id, update).then((response) => {
-          this._filmsModel.updateFilm(updateType, response);
+        this._api.addComments(id, update).then((response) => {
+          this._filmsModel.addComment(updateType, response, id);
         });
         break;
       case UserAction.DELETE_COMMENT:
