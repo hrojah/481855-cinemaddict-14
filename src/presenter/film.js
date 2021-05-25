@@ -35,6 +35,7 @@ export default class Film {
 
   init(film) {
     this._film = film;
+    this._comments = film.comments;
     const prevFilmComponent = this._filmComponent;
     this._filmComponent = new FilmCardView(film);
     this._filmComponent.setClickHandler(this._renderPopup);
@@ -129,7 +130,6 @@ export default class Film {
           ),
         },
       ),
-      this._film.id,
     );
   }
 
@@ -195,6 +195,14 @@ export default class Film {
       this._film.comments[index],
       id,
     );
+  }
+
+  setDelete(update) {
+    this._popupComponent.deleteComment(update);
+  }
+
+  setSaving(update) {
+    this._popupComponent.addComment(update);
   }
 
   _handleTextAreaInput(evt) {

@@ -204,11 +204,13 @@ export default class Board {
         });
         break;
       case UserAction.ADD_COMMENT:
+        this._filmPresenter[id].setSaving(update);
         this._api.addComments(id, update).then((response) => {
           this._filmsModel.addComment(updateType, response, id);
         });
         break;
       case UserAction.DELETE_COMMENT:
+        this._filmPresenter[id].setDelete(update);
         this._api.deleteComment(update.id).then(() => {
           this._filmsModel.deleteComment(updateType, update, id);
         });

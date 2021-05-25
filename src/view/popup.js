@@ -6,7 +6,7 @@ import he from 'he';
 import {UpdateType, UserAction} from '../const';
 dayjs.extend(relativeTime);
 
-const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, originName, rating, director, writers, actors, ageRating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments}, text) => {
+const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, originName, rating, director, writers, actors, ageRating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments, isSaving}, text) => {
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
   };
@@ -16,7 +16,7 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
         if (!comment.text || !comment.author || !comment.date || !comment.emoji) {
           return;
         }
-
+        const {isDelete} = comment;
         return `<li class="film-details__comment">
            <span class="film-details__comment-emoji">
              <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
@@ -25,7 +25,7 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
              <p class="film-details__comment-text">${he.encode(comment.text)}</p>
              <p class="film-details__comment-info">
                <span class="film-details__comment-author">${comment.author}</span>
-               <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>                <button class="film-details__comment-delete">Delete</button>
+               <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>                <button class="film-details__comment-delete" ${isDelete ? 'disabled' : ''}>${isDelete ? 'Deleting...' : 'Delete'}</button>
               </p>
             </div>
           </li>`;
@@ -142,26 +142,26 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
           <div class="film-details__add-emoji-label"></div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${text}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isSaving ? 'disabled' : ''}>${text}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${isSaving ? 'disabled' : ''}>
             <label class="film-details__emoji-label" for="emoji-smile">
               <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${isSaving ? 'disabled' : ''}>
             <label class="film-details__emoji-label" for="emoji-sleeping">
               <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${isSaving ? 'disabled' : ''}>
             <label class="film-details__emoji-label" for="emoji-puke">
               <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${isSaving ? 'disabled' : ''}>
             <label class="film-details__emoji-label" for="emoji-angry">
               <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
             </label>
@@ -176,6 +176,8 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
 export default class FilmPopup extends SmartView {
   constructor(film, changeData) {
     super();
+    // this._film = FilmPopup.parseFilmToData(film);
+    // this._film = Object.assign({}, film, {isDisabled: false});
     this._film = film;
     this._changeData = changeData;
     this._id = this._film.id;
