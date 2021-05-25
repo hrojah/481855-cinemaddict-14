@@ -20,7 +20,7 @@ export default class Smart extends Abstract {
       this._film,
       {
         isSaving: true,
-      }
+      },
     );
 
     this._film.comments.push(update);
