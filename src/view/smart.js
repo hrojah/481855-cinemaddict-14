@@ -6,6 +6,27 @@ export default class Smart extends Abstract {
     this._film = {};
   }
 
+  deleteComment(update) {
+    if (!update) {
+      return;
+    }
+
+    update.isDelete = true;
+  }
+
+  addComment(update) {
+    debugger;
+    this._film = Object.assign(
+      {},
+      this._film,
+      {
+        isSaving: true,
+      }
+    );
+
+    this._film.comments.push(update);
+  }
+
   updateDate(update) {
     if (!update) {
       return;
