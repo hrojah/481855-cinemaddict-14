@@ -26,7 +26,6 @@ const footerStatisticsElement = document.querySelector('.footer__statistics');
 const boardPresenter = new BoardPresenter(siteBodyElement, siteMainElement, filmsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, boardPresenter);
 
-
 render(siteHeaderElement, new RankUserView(filter[FilterType.HISTORY](filmsModel.getFilms())), RenderPosition.BEFOREEND);
 
 filterPresenter.init();
