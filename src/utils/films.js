@@ -6,11 +6,11 @@ export const date = (date) => {
 };
 
 export const topRatedFilms = (films) => {
-  return films.slice().sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
+  return films.slice().sort((a, b) => b.filmInfo.rating - a.filmInfo.rating).filter((film) => film.rating !== 0);
 };
 
 export const mostCommentsFilms = (films) => {
-  return films.slice().sort((a,b) => b.comments.length - a.comments.length);
+  return films.slice().sort((a,b) => b.comments.length - a.comments.length).filter((film) => film.comments.length);
 };
 
 export const sortRating = (filmA, filmB) => {

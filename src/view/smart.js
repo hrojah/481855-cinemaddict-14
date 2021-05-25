@@ -6,20 +6,6 @@ export default class Smart extends Abstract {
     this._film = {};
   }
 
-  updateData(update) {
-    if (!update) {
-      return;
-    }
-
-    this._film = Object.assign(
-      {},
-      this._film,
-      update,
-    );
-
-    this.updateElement();
-  }
-
   updateDate(update) {
     if (!update) {
       return;

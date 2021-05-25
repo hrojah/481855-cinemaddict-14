@@ -4,7 +4,6 @@ export default class Films extends Observer {
   constructor() {
     super();
     this._films = [];
-    this._comments = [];
   }
 
   setFilms(updateType, films) {
@@ -41,19 +40,15 @@ export default class Films extends Observer {
 
   addComment(updateType, update, id) {
     const film = this._films.find((film) => film.id === id);
-    this._comments = [
-      update,
-      ...this._comments,
-    ];
+    this._film.comments = update;
 
-    film.comments = this._comments;
+    film.comments = this._film.comments;
     this._notify(updateType, film);
   }
 
   deleteComment(updateType, update, id) {
     const film = this._films.find((film) => film.id === id);
     film.comments = film.comments.filter((comment) => comment.id !== update.id);
-    this._comments = film.comments;
     this._notify(updateType, film);
   }
 
@@ -94,7 +89,7 @@ export default class Films extends Observer {
       author: comment.author,
       id: comment.id,
       text: comment.comment,
-      emoji: `./images/emoji/${comment.emotion}.png`,
+      emoji: comment.emotion,
       date: new Date(comment.date),
     };
   }
@@ -109,7 +104,12 @@ export default class Films extends Observer {
   static adaptToServer(film) {
     return {
       id: film.id,
-      comments: film.comments,
+      comments: film.comments.map((item) => {
+        if (item.author || item.date || item.text || item.emoji) {
+          return item.id;
+        }
+        return item;
+      }),
       film_info:
         {
           age_rating: film.filmInfo.ageRating,
@@ -134,6 +134,38 @@ export default class Films extends Observer {
           already_watched: film.userDetails.isWatched,
           watchlist: film.userDetails.isWatchList,
           watching_date: film.userDetails.watchingDate.toISOString(),
+        },
+    };
+  }
+
+  static adaptFilmToClient(film) {
+    return {
+      id: film.movie.id,
+      comments: film.comments,
+      filmInfo:
+        {
+          ageRating: film.movie.film_info.age_rating,
+          originName: film.movie.film_info.alternative_title,
+          name: film.movie.film_info.title,
+          genres: film.movie.film_info.genre,
+          rating: film.movie.film_info.total_rating,
+          runtime: film.movie.film_info.runtime,
+          actors: film.movie.film_info.actors,
+          writers: film.movie.film_info.writers,
+          poster: film.movie.film_info.poster,
+          director: film.movie.film_info.director,
+          description: film.movie.film_info.description,
+          release: {
+            releaseDate: new Date(film.movie.film_info.release.date),
+            country: film.movie.film_info.release.release_country,
+          },
+        },
+      userDetails:
+        {
+          isFavorite: film.movie.user_details.favorite,
+          isWatched: film.movie.user_details.already_watched,
+          isWatchList: film.movie.user_details.watchlist,
+          watchingDate: new Date(film.movie.user_details.watching_date),
         },
     };
   }

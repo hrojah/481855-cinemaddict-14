@@ -36,7 +36,6 @@ export default class Film {
   init(film) {
     this._film = film;
     const prevFilmComponent = this._filmComponent;
-
     this._filmComponent = new FilmCardView(film);
     this._filmComponent.setClickHandler(this._renderPopup);
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -51,7 +50,7 @@ export default class Film {
     if (this._mode === Mode.DEFAULT || this._mode === Mode.POPUP) {
       replace(this._filmComponent, prevFilmComponent);
       if (this._mode === Mode.POPUP) {
-        this._renderPopup();
+        this._popupComponent.updateElement();
       }
     }
 
