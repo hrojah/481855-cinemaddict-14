@@ -5,8 +5,7 @@ import {render, RenderPosition} from './utils/render';
 import BoardPresenter from './presenter/board';
 import FilmsModel from './model/films';
 import FilterModel from './model/filter';
-import {filter} from './utils/filter';
-import {FilterType, UpdateType} from './const';
+import {UpdateType} from './const';
 import Api from './api';
 
 const AUTHORIZATION = 'Basic c0i4n1e9m4a4';
@@ -26,13 +25,12 @@ const footerStatisticsElement = document.querySelector('.footer__statistics');
 const boardPresenter = new BoardPresenter(siteBodyElement, siteMainElement, filmsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, boardPresenter);
 
-render(siteHeaderElement, new RankUserView(filter[FilterType.HISTORY](filmsModel.getFilms())), RenderPosition.BEFOREEND);
-
 filterPresenter.init();
 boardPresenter.init();
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
+    render(siteHeaderElement, new RankUserView(films), RenderPosition.BEFOREEND);
   })
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);

@@ -38,12 +38,10 @@ export default class Films extends Observer {
     this._notify(updateType, update);
   }
 
-  addComment(updateType, update, id) {
-    const film = this._films.find((film) => film.id === id);
+  addComment(updateType, update) {
     this._film.comments = update;
 
-    film.comments = this._film.comments;
-    this._notify(updateType, film);
+    this._notify(updateType, this._film);
   }
 
   deleteComment(updateType, update, id) {

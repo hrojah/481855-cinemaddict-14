@@ -7,12 +7,14 @@ const createFilmCardTemplate = ({filmInfo: {release: {releaseDate}, name, rating
     return flag ? 'film-card__controls-item--active' : '';
   };
 
-  const getGenres = (genres) => {
-    return genres
-      .map((genre) => {
-        return `${genre}`;
-      }).join(' ');
+  const getGenre = (genres) => {
+    return genres[0];
+  };
 
+  const getDescription = (description) => {
+    if (description.length > 140) {
+      return `${description.substring(0, 140)}...`;
+    } return `${description}`;
   };
 
   return `<article class="film-card">
@@ -21,10 +23,10 @@ const createFilmCardTemplate = ({filmInfo: {release: {releaseDate}, name, rating
           <p class="film-card__info">
             <span class="film-card__year">${date(releaseDate)}</span>
             <span class="film-card__duration">${formatDate(runtime)}</span>
-            <span class="film-card__genre">${getGenres(genres)}</span>
+            <span class="film-card__genre">${getGenre(genres)}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
-          <p class="film-card__description">${description}</p>
+          <p class="film-card__description">${getDescription(description)}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <div class="film-card__controls">
             <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isButtonActive(isWatchList)}" type="button">Add to watchlist</button>

@@ -14,6 +14,14 @@ export default class Smart extends Abstract {
     update.isDelete = true;
   }
 
+  deleteError(update) {
+    if (!update) {
+      return;
+    }
+
+    update.isDelete = false;
+  }
+
   addComment(update) {
     this._film = Object.assign(
       {},
@@ -26,7 +34,7 @@ export default class Smart extends Abstract {
     this._film.comments.push(update);
   }
 
-  updateDate(update) {
+  updateData(update) {
     if (!update) {
       return;
     }
@@ -34,6 +42,20 @@ export default class Smart extends Abstract {
     this._data = Object.assign(
       {},
       this._data,
+      update,
+    );
+
+    this.updateElement();
+  }
+
+  updateDate(update) {
+    if (!update) {
+      return;
+    }
+
+    this._film = Object.assign(
+      {},
+      this._film,
       update,
     );
 

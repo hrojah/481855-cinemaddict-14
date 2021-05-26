@@ -35,3 +35,10 @@ export const interval = {
   MONTH: 'month',
   YEAR: 'year',
 };
+
+export const filmCount = {
+  NOVICE: 10,
+  FUN : 20,
+};
+
+export const SHAKE_ANIMATION_TIMEOUT = 600;

@@ -1,14 +1,16 @@
+import {filmCount} from '../const';
+
 export const createRank = (films) => {
   const filmsCount = films.length;
 
   switch (true) {
     case filmsCount === 0:
       return '';
-    case filmsCount >= 0 && filmsCount <= 10:
+    case filmsCount >= 0 && filmsCount <= filmCount.NOVICE:
       return 'Novice';
-    case filmsCount >= 10 && filmsCount <= 20:
+    case filmsCount >= filmCount.NOVICE && filmsCount <= filmCount.FUN:
       return 'Fun';
-    case filmsCount > 20:
+    case filmsCount > filmCount.FUN:
       return 'Movie Buff';
   }
 };

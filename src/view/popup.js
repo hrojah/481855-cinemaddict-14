@@ -10,6 +10,7 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
   const isCheckboxChecked = (flag) => {
     return flag ? 'checked' : '';
   };
+
   const renderComments = () => {
     return comments
       .map((comment) => {
@@ -176,17 +177,12 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
 export default class FilmPopup extends SmartView {
   constructor(film, changeData) {
     super();
-    // this._film = FilmPopup.parseFilmToData(film);
-    // this._film = Object.assign({}, film, {isDisabled: false});
     this._film = film;
     this._changeData = changeData;
     this._id = this._film.id;
     this._textarea =  '';
     this._newComment = {};
     this._clickHandler = this._clickHandler.bind(this);
-    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-    this._watchedClickHandler = this._watchedClickHandler.bind(this);
-    this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._favoriteToggleHandler = this._favoriteToggleHandler.bind(this);
     this._watchedToggleHandler = this._watchedToggleHandler.bind(this);
     this._watchListToggleHandler = this._watchListToggleHandler.bind(this);
@@ -228,39 +224,9 @@ export default class FilmPopup extends SmartView {
     this._callback.click();
   }
 
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.favoriteClick();
-  }
-
-  _watchListClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.watchListClick();
-  }
-
-  _watchedClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.watchedClick();
-  }
-
   setClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
-  }
-
-  setFavoriteClickHandler(callback) {
-    this._callback.favoriteClick = callback;
-    this.getElement().querySelector('.film-details__control-label--favorite').addEventListener('click', this._favoriteClickHandler);
-  }
-
-  setWatchListClickHandler(callback) {
-    this._callback.watchListClick = callback;
-    this.getElement().querySelector('.film-details__control-label--watchlist').addEventListener('click', this._watchListClickHandler);
-  }
-
-  setWatchedClickHandler(callback) {
-    this._callback.watchedClick = callback;
-    this.getElement().querySelector('.film-details__control-label--watched').addEventListener('click', this._watchedClickHandler);
   }
 
   setFormSubmitHandler(callback) {
@@ -271,7 +237,7 @@ export default class FilmPopup extends SmartView {
     evt.preventDefault();
     this._callback.submit(this._newComment, this._id);
     this._textarea = '';
-    this.updateElement();
+    // this.updateElement();
     this._newComment = {};
   }
 
@@ -294,6 +260,7 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
+    this.updateElement();
   }
 
   _watchedToggleHandler(evt) {
@@ -315,6 +282,7 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
+    this.updateElement();
   }
 
   _watchListToggleHandler(evt) {
@@ -336,6 +304,7 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
+    this.updateElement();
   }
 
   _emojiClickHandler(evt) {

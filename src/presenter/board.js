@@ -199,21 +199,28 @@ export default class Board {
   _handleViewAction(actionType, updateType, update, id) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._api.updateFilm(update).then((response) => {
-          this._filmsModel.updateFilm(updateType, response);
-        });
+        this._api.updateFilm(update)
+          .then((response) => {
+            this._filmsModel.updateFilm(updateType, response);
+          });
         break;
       case UserAction.ADD_COMMENT:
         this._filmPresenter[id].setSaving(update);
-        this._api.addComments(id, update).then((response) => {
-          this._filmsModel.addComment(updateType, response, id);
-        });
+        this._api.addComments(id, update)
+          .then((response) => {
+            this._filmsModel.addComment(updateType, response);
+          })
+          .catch(() => {
+            this._filmPresenter.setAborting();
+          });
         break;
       case UserAction.DELETE_COMMENT:
         this._filmPresenter[id].setDelete(update);
-        this._api.deleteComment(update.id).then(() => {
-          this._filmsModel.deleteComment(updateType, update, id);
-        });
+        this._api.deleteComment(update.id)
+          .then(() => {
+            this._filmsModel.deleteComment(updateType, update, id);
+          })
+          .catch(() => this._filmPresenter.setViewState(update));
         break;
     }
   }

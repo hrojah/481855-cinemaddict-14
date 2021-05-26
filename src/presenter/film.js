@@ -35,7 +35,7 @@ export default class Film {
 
   init(film) {
     this._film = film;
-    this._comments = film.comments;
+    // this._comments = film.comments;
     const prevFilmComponent = this._filmComponent;
     this._filmComponent = new FilmCardView(film);
     this._filmComponent.setClickHandler(this._renderPopup);
@@ -76,9 +76,6 @@ export default class Film {
     this._popupComponent = new FilmPopupView(this._film, this._changeData);
     this._mode = Mode.POPUP;
 
-    this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._popupComponent.setWatchListClickHandler(this._handleWatchlistClick);
-    this._popupComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._popupComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._siteBodyElement.classList.add('hide-overflow');
     this._popupComponent.setClickHandler(this._closePopup);
@@ -88,14 +85,17 @@ export default class Film {
 
     if (prevPopupComponent === null) {
       render(this._siteBodyElement, this._popupComponent, RenderPosition.BEFOREEND);
+      return;
     }
+    replace(this._popupComponent, prevPopupComponent);
+    remove(prevPopupComponent);
   }
 
   _closePopup() {
     remove(this._popupComponent);
     this._popupComponent = null;
     this._mode = Mode.DEFAULT;
-
+    document.removeEventListener('keydown', this._escKeydownHandler);
     this._siteBodyElement.classList.remove('hide-overflow');
   }
 
@@ -116,7 +116,7 @@ export default class Film {
   _handleFavoriteClick() {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
@@ -136,7 +136,7 @@ export default class Film {
   _handleWatchedClick() {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
@@ -156,7 +156,7 @@ export default class Film {
   _handleWatchlistClick() {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
@@ -204,6 +204,25 @@ export default class Film {
   setSaving(update) {
     this._popupComponent.addComment(update);
   }
+
+  setAborting() {
+    // debugger;
+    // this._popupComponent.updateData({isDisabled: false})
+    const resetFormState = () => {
+      this._popupComponent.updateData({
+        isDisabled: false,
+      });
+    };
+
+    this._popupComponent.shake(resetFormState);
+  }
+
+  setViewState(update) {
+    this._popupComponent.querySelector('.film-details__new-comment').shake(() => {
+      this._popupComponent.deleteError(update);
+    });
+  }
+
 
   _handleTextAreaInput(evt) {
     this._popupComponent().querySelector('.film-details__comment-input').innerHTML = evt.target.value;
