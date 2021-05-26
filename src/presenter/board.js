@@ -60,12 +60,13 @@ export default class Board {
     const filterType = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms();
     const filteredFilms = filter[filterType](films);
+    const sortedFilms = filteredFilms.slice();
 
     switch (this._currentSortType) {
       case SortType.DATE:
-        return filteredFilms.sort(sortDate);
+        return sortedFilms.sort(sortDate);
       case SortType.RATING:
-        return filteredFilms.sort(sortRating);
+        return sortedFilms.sort(sortRating);
     }
 
     return filteredFilms;
@@ -197,7 +198,6 @@ export default class Board {
   }
 
   _handleViewAction(actionType, updateType, update, id) {
-    debugger;
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update)

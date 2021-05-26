@@ -259,7 +259,6 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
-    this.updateElement();
   }
 
   _watchedToggleHandler(evt) {
@@ -281,7 +280,6 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
-    this.updateElement();
   }
 
   _watchListToggleHandler(evt) {
@@ -303,7 +301,6 @@ export default class FilmPopup extends SmartView {
         },
       ),
     );
-    this.updateElement();
   }
 
   _emojiClickHandler(evt) {
@@ -319,6 +316,15 @@ export default class FilmPopup extends SmartView {
   setInputHandler() {
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textInputHandler);
   }
+
+  // setFavoritesClickHandler(callback) {
+  //   this._callback.favorites = callback;
+  // }
+
+  // _favoriteClickHandler(evt) {
+  //   evt.preventDefault();
+  //   this._callback.favorites();
+  // }
 
   _deleteClickHandler(index) {
     return (evt) => {

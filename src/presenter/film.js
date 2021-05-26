@@ -50,7 +50,9 @@ export default class Film {
     if (this._mode === Mode.DEFAULT || this._mode === Mode.POPUP) {
       replace(this._filmComponent, prevFilmComponent);
       if (this._mode === Mode.POPUP) {
-        this._popupComponent.updateElement();
+        const popupScrollTop = this._popupComponent.getElement().scrollTop;
+        this._renderPopup();
+        this._popupComponent.getElement().scrollTop = popupScrollTop;
       }
     }
 
@@ -80,13 +82,14 @@ export default class Film {
     this._popupComponent.setClickHandler(this._closePopup);
     this._popupComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._popupComponent.setInputHandler(this._handleTextAreaInput);
+    // this._popupComponent.setFavoritesClickHandler(this._handleFavoriteClick);
+    // this._popupComponent.setIsWatchedClickHandler(this._handleWatchedClick);
+    // this._popupComponent.setWatchListClickHandler(this._handleWatchlistClick);
     document.addEventListener('keydown', this._escKeydownHandler);
 
     if (prevPopupComponent === null) {
       render(this._siteBodyElement, this._popupComponent, RenderPosition.BEFOREEND);
-      return;
     }
-    replace(this._popupComponent, prevPopupComponent);
     remove(prevPopupComponent);
   }
 
@@ -131,6 +134,7 @@ export default class Film {
       ),
     );
   }
+
 
   _handleWatchedClick() {
     this._changeData(
@@ -196,6 +200,7 @@ export default class Film {
     );
   }
 
+
   setDelete(update) {
     this._popupComponent.deleteComment(update);
   }
@@ -217,7 +222,7 @@ export default class Film {
   setViewState(update) {
     const resetFromState = (update) => {
       this._popupComponent.deleteError(update);
-    }
+    };
     this._popupComponent.querySelector('.film-details__new-comment').shake(resetFromState);
   }
 
