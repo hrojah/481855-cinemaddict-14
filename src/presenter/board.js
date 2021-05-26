@@ -197,6 +197,7 @@ export default class Board {
   }
 
   _handleViewAction(actionType, updateType, update, id) {
+    debugger;
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update)
@@ -211,7 +212,7 @@ export default class Board {
             this._filmsModel.addComment(updateType, response);
           })
           .catch(() => {
-            this._filmPresenter.setAborting();
+            this._filmPresenter[id].setAborting();
           });
         break;
       case UserAction.DELETE_COMMENT:
@@ -220,7 +221,9 @@ export default class Board {
           .then(() => {
             this._filmsModel.deleteComment(updateType, update, id);
           })
-          .catch(() => this._filmPresenter.setViewState(update));
+          .catch(() => {
+            this._filmPresenter[id].setViewState(update);
+          });
         break;
     }
   }

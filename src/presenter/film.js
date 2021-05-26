@@ -35,7 +35,6 @@ export default class Film {
 
   init(film) {
     this._film = film;
-    // this._comments = film.comments;
     const prevFilmComponent = this._filmComponent;
     this._filmComponent = new FilmCardView(film);
     this._filmComponent.setClickHandler(this._renderPopup);
@@ -206,8 +205,6 @@ export default class Film {
   }
 
   setAborting() {
-    // debugger;
-    // this._popupComponent.updateData({isDisabled: false})
     const resetFormState = () => {
       this._popupComponent.updateData({
         isDisabled: false,
@@ -218,9 +215,10 @@ export default class Film {
   }
 
   setViewState(update) {
-    this._popupComponent.querySelector('.film-details__new-comment').shake(() => {
+    const resetFromState = (update) => {
       this._popupComponent.deleteError(update);
-    });
+    }
+    this._popupComponent.querySelector('.film-details__new-comment').shake(resetFromState);
   }
 
 

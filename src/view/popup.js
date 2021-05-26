@@ -237,7 +237,6 @@ export default class FilmPopup extends SmartView {
     evt.preventDefault();
     this._callback.submit(this._newComment, this._id);
     this._textarea = '';
-    // this.updateElement();
     this._newComment = {};
   }
 
