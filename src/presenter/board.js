@@ -212,6 +212,7 @@ export default class Board {
             this._filmsModel.addComment(updateType, response);
           })
           .catch(() => {
+            debugger;
             this._filmPresenter[id].setAborting(update);
           });
         break;

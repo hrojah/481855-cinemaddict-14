@@ -42,6 +42,10 @@ export default class Film {
     this._filmComponent.setWatchListClickHandler(this._handleWatchlistClick);
     this._filmComponent.setWatchedClickHandler(this._handleWatchedClick);
 
+    if (this._mode === Mode.POPUP) {
+      this._setComments();
+    }
+
     if (prevFilmComponent === null) {
       render(this._filmListContainer, this._filmComponent, RenderPosition.BEFOREEND);
       return;
@@ -50,10 +54,17 @@ export default class Film {
     if (this._mode === Mode.DEFAULT || this._mode === Mode.POPUP) {
       replace(this._filmComponent, prevFilmComponent);
       if (this._mode === Mode.POPUP) {
-        debugger;
-        const popupScrollTop = this._popupComponent.getElement().scrollTop;
-        this._renderPopup();
-        this._popupComponent.getElement().scrollTop = popupScrollTop;
+        const prevPopupComponent = this._popupComponent;
+        const scrollTop = prevPopupComponent.getElement().scrollTop;
+        this._popupComponent = new FilmPopupView(this._film, this._changeData);
+
+        replace(this._popupComponent, prevPopupComponent);
+        this._popupComponent.getElement().scrollTop = scrollTop;
+        this._popupComponent.setFormSubmitHandler(this._handleFormSubmit);
+        this._popupComponent.setClickHandler(this._closePopup);
+        this._popupComponent.setDeleteClickHandler(this._handleDeleteClick);
+        this._popupComponent.setInputHandler(this._handleTextAreaInput);
+        remove(prevFilmComponent);
       }
     }
 
