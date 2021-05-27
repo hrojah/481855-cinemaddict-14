@@ -2,7 +2,7 @@ import FilmCardView from '../view/film-card';
 import FilmPopupView from '../view/popup';
 import {render, remove, replace, RenderPosition} from '../utils/render';
 import {isEscPressed} from '../utils/common';
-import {UserAction, UpdateType} from '../const';
+import {UserAction, UpdateType, SHAKE_ANIMATION_TIMEOUT} from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -50,6 +50,7 @@ export default class Film {
     if (this._mode === Mode.DEFAULT || this._mode === Mode.POPUP) {
       replace(this._filmComponent, prevFilmComponent);
       if (this._mode === Mode.POPUP) {
+        debugger;
         const popupScrollTop = this._popupComponent.getElement().scrollTop;
         this._renderPopup();
         this._popupComponent.getElement().scrollTop = popupScrollTop;
@@ -82,9 +83,6 @@ export default class Film {
     this._popupComponent.setClickHandler(this._closePopup);
     this._popupComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._popupComponent.setInputHandler(this._handleTextAreaInput);
-    // this._popupComponent.setFavoritesClickHandler(this._handleFavoriteClick);
-    // this._popupComponent.setIsWatchedClickHandler(this._handleWatchedClick);
-    // this._popupComponent.setWatchListClickHandler(this._handleWatchlistClick);
     document.addEventListener('keydown', this._escKeydownHandler);
 
     if (prevPopupComponent === null) {
@@ -200,32 +198,34 @@ export default class Film {
     );
   }
 
-
-  setDelete(update) {
-    this._popupComponent.deleteComment(update);
-  }
-
-  setSaving(update) {
-    this._popupComponent.addComment(update);
+  setSaving() {
+    this._popupComponent.addComment();
   }
 
   setAborting() {
     const resetFormState = () => {
-      this._popupComponent.updateData({
-        isDisabled: false,
-      });
+      this._popupComponent.errorAddComment();
     };
 
     this._popupComponent.shake(resetFormState);
   }
 
-  setViewState(update) {
-    const resetFromState = (update) => {
-      this._popupComponent.deleteError(update);
-    };
-    this._popupComponent.querySelector('.film-details__new-comment').shake(resetFromState);
+  setDelete(update) {
+    this._popupComponent.deleteComment(update);
   }
 
+  setViewState(update) {
+    const newCommentElement = this._popupComponent.getElement().querySelector('.film-details__new-comment');
+    const resetFormState = () => {
+      this._popupComponent.errorDeleteComment(update);
+    };
+
+    newCommentElement.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      newCommentElement.style.animation = '';
+      resetFormState();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
 
   _handleTextAreaInput(evt) {
     this._popupComponent().querySelector('.film-details__comment-input').innerHTML = evt.target.value;

@@ -212,7 +212,7 @@ export default class Board {
             this._filmsModel.addComment(updateType, response);
           })
           .catch(() => {
-            this._filmPresenter[id].setAborting();
+            this._filmPresenter[id].setAborting(update);
           });
         break;
       case UserAction.DELETE_COMMENT:
