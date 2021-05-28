@@ -112,30 +112,30 @@ export default class Films extends Observer {
         }
         return item;
       }),
-      film_info:
+      'film_info':
         {
-          age_rating: film.filmInfo.ageRating,
-          alternative_title: film.filmInfo.originName,
-          title: film.filmInfo.name,
-          genre: film.filmInfo.genres,
-          total_rating: film.filmInfo.rating,
-          runtime: film.filmInfo.runtime,
-          actors: film.filmInfo.actors,
-          writers: film.filmInfo.writers,
-          poster: film.filmInfo.poster,
-          director: film.filmInfo.director,
-          description: film.filmInfo.description,
-          release: {
-            date: film.filmInfo.release.releaseDate.toISOString(),
-            release_country: film.filmInfo.release.country,
+          'age_rating': film.filmInfo.ageRating,
+          'alternative_title': film.filmInfo.originName,
+          'title': film.filmInfo.name,
+          'genre': film.filmInfo.genres,
+          'total_rating': film.filmInfo.rating,
+          'runtime': film.filmInfo.runtime,
+          'actors': film.filmInfo.actors,
+          'writers': film.filmInfo.writers,
+          'poster': film.filmInfo.poster,
+          'director': film.filmInfo.director,
+          'description': film.filmInfo.description,
+          'release': {
+            'date': film.filmInfo.release.releaseDate.toISOString(),
+            'release_country': film.filmInfo.release.country,
           },
         },
-      user_details:
+      'user_details':
         {
-          favorite: film.userDetails.isFavorite,
-          already_watched: film.userDetails.isWatched,
-          watchlist: film.userDetails.isWatchList,
-          watching_date: film.userDetails.watchingDate.toISOString(),
+          'favorite': film.userDetails.isFavorite,
+          'already_watched': film.userDetails.isWatched,
+          'watchlist': film.userDetails.isWatchList,
+          'watching_date': film.userDetails.watchingDate.toISOString(),
         },
     };
   }
