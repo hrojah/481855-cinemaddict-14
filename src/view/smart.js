@@ -20,9 +20,11 @@ export default class Smart extends Abstract {
     }
 
     update.isDelete = false;
+    this.updateElement();
   }
 
   addComment() {
+    debugger
     this._film = Object.assign(
       {},
       this._film,
@@ -30,6 +32,7 @@ export default class Smart extends Abstract {
         isSaving: true,
       },
     );
+    this.updateElement();
   }
 
   errorAddComment() {
@@ -40,6 +43,7 @@ export default class Smart extends Abstract {
         isSaving: false,
       },
     );
+    this.updateElement();
   }
 
   updateDate(update) {
