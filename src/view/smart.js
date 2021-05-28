@@ -24,7 +24,6 @@ export default class Smart extends Abstract {
   }
 
   addComment() {
-    debugger
     this._film = Object.assign(
       {},
       this._film,
