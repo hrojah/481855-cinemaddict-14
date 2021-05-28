@@ -32,7 +32,6 @@ export default class Smart extends Abstract {
     );
   }
 
-
   errorAddComment() {
     this._film = Object.assign(
       {},

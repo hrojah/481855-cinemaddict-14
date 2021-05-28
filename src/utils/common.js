@@ -1,3 +1,5 @@
+import {SHAKE_ANIMATION_TIMEOUT} from '../const';
+
 export const isEscPressed = (evt) => {
   return (evt.key === 'Escape' || evt.key === 'Esc');
 };
@@ -12,4 +14,12 @@ export const getGenreCounts = (films) => {
     });
     return acc;
   },{});
+};
+
+export const shake = (element, callback) => {
+  element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+  setTimeout(() => {
+    element.style.animation = '';
+    callback();
+  }, SHAKE_ANIMATION_TIMEOUT);
 };

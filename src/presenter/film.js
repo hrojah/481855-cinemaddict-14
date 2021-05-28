@@ -2,7 +2,8 @@ import FilmCardView from '../view/film-card';
 import FilmPopupView from '../view/popup';
 import {render, remove, replace, RenderPosition} from '../utils/render';
 import {isEscPressed} from '../utils/common';
-import {UserAction, UpdateType, SHAKE_ANIMATION_TIMEOUT} from '../const';
+import {UserAction, UpdateType} from '../const';
+import {shake} from '../utils/common';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -42,10 +43,6 @@ export default class Film {
     this._filmComponent.setWatchListClickHandler(this._handleWatchlistClick);
     this._filmComponent.setWatchedClickHandler(this._handleWatchedClick);
 
-    if (this._mode === Mode.POPUP) {
-      this._setComments();
-    }
-
     if (prevFilmComponent === null) {
       render(this._filmListContainer, this._filmComponent, RenderPosition.BEFOREEND);
       return;
@@ -57,7 +54,9 @@ export default class Film {
         const prevPopupComponent = this._popupComponent;
         const scrollTop = prevPopupComponent.getElement().scrollTop;
         this._popupComponent = new FilmPopupView(this._film, this._changeData);
-
+        this._comments = this._filmsModel.getComments();
+        this._filmsModel.setComments(this._comments, this._film);
+        this._popupComponent.updateElement();
         replace(this._popupComponent, prevPopupComponent);
         this._popupComponent.getElement().scrollTop = scrollTop;
         this._popupComponent.setFormSubmitHandler(this._handleFormSubmit);
@@ -218,7 +217,7 @@ export default class Film {
       this._popupComponent.errorAddComment();
     };
 
-    this._popupComponent.shake(resetFormState);
+    shake(this._popupComponent.getElement(), resetFormState);
   }
 
   setDelete(update) {
@@ -226,16 +225,13 @@ export default class Film {
   }
 
   setViewState(update) {
-    const newCommentElement = this._popupComponent.getElement().querySelector('.film-details__new-comment');
+    const index = this._film.comments.indexOf(update);
+    const comments = this._popupComponent.getElement().querySelectorAll('.film-details__comment');
+    const deletedComment = comments[index];
     const resetFormState = () => {
       this._popupComponent.errorDeleteComment(update);
     };
-
-    newCommentElement.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-    setTimeout(() => {
-      newCommentElement.style.animation = '';
-      resetFormState();
-    }, SHAKE_ANIMATION_TIMEOUT);
+    shake(deletedComment, resetFormState);
   }
 
   _handleTextAreaInput(evt) {
