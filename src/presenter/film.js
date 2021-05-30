@@ -3,8 +3,6 @@ import FilmPopupView from '../view/popup';
 import {render, remove, replace, RenderPosition} from '../utils/render';
 import {isEscPressed} from '../utils/common';
 import {UserAction, UpdateType} from '../const';
-import {shake, isOnline} from '../utils/common';
-// import {toast} from '../utils/toast';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -69,6 +67,51 @@ export default class Film {
     remove(prevFilmComponent);
   }
 
+  destroy() {
+    remove(this._filmComponent);
+    if (this._popupComponent !== null) {
+      this._closePopup();
+    }
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._closePopup();
+    }
+  }
+
+  setSaving() {
+    if (this._popupComponent) {
+      this._popupComponent.addComment();
+    }
+  }
+
+  setAborting() {
+    if (this._popupComponent) {
+      const resetFormState = () => {
+        this._popupComponent.errorAddComment();
+      };
+
+      this._popupComponent.shake(resetFormState);
+    }
+  }
+
+  setDelete(update) {
+    if (this._popupComponent) {
+      this._popupComponent.deleteComment(update);
+    }
+  }
+
+  setViewState(update) {
+    if (this._popupComponent) {
+      const deletedComment = this._popupComponent.getDeletedComment(update);
+      const resetFormState = () => {
+        this._popupComponent.errorDeleteComment(update);
+      };
+      this._popupComponent.shake(resetFormState, deletedComment);
+    }
+  }
+
   _setComments() {
     this._api.getComments(this._film)
       .then((comments) => {
@@ -111,13 +154,6 @@ export default class Film {
   _escKeydownHandler(evt) {
     if (isEscPressed(evt)) {
       evt.preventDefault();
-      this._closePopup();
-    }
-  }
-
-  destroy() {
-    remove(this._filmComponent);
-    if (this._popupComponent !== null) {
       this._closePopup();
     }
   }
@@ -184,11 +220,6 @@ export default class Film {
   }
 
   _handleFormSubmit(update, id) {
-    // if (!isOnline()) {
-    //   toast('You can\'t save comment offline');
-    //   return;
-    // }
-
     this._changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
@@ -197,49 +228,12 @@ export default class Film {
     );
   }
 
-  resetView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._closePopup();
-    }
-  }
-
   _handleDeleteClick(index, id) {
-    // if (!isOnline()) {
-    //   toast('You can\'t delete comment offline');
-    //   return;
-    // }
-
     this._changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
       this._film.comments[index],
       id,
     );
-  }
-
-  setSaving() {
-    this._popupComponent.addComment();
-  }
-
-  setAborting() {
-    const resetFormState = () => {
-      this._popupComponent.errorAddComment();
-    };
-
-    shake(this._popupComponent.getElement(), resetFormState);
-  }
-
-  setDelete(update) {
-    this._popupComponent.deleteComment(update);
-  }
-
-  setViewState(update) {
-    // const index = this._film.comments.indexOf(update);
-    // const comments = this._popupComponent.getElement().querySelectorAll('.film-details__comment');
-    const deletedComment = this._popupComponent.getDeletedComment(update);
-    const resetFormState = () => {
-      this._popupComponent.errorDeleteComment(update);
-    };
-    shake(deletedComment, resetFormState);
   }
 }

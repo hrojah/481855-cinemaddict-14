@@ -32,7 +32,7 @@ self.addEventListener('install', (evt) => {
           '/images/icons/icon-watched-active.svg',
           '/images/icons/icon-watchlist.svg',
           '/images/icons/icon-watchlist-active.svg',
-          '/images/posters/made-for-each-others.png',
+          '/images/posters/made-for-each-other.png',
           '/images/posters/popeye-meets-sinbad.png',
           '/images/posters/sagebrush-trail.jpg',
           '/images/posters/santa-claus-conquers-the-martians.jpg',

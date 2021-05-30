@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {formatDate, genre, fullDate} from '../utils/films';
 import he from 'he';
-import {UpdateType, UserAction} from '../const';
+import {SHAKE_ANIMATION_TIMEOUT, UpdateType, UserAction} from '../const';
 dayjs.extend(relativeTime);
 
 const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, originName, rating, director, writers, actors, ageRating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments, isSaving}, text) => {
@@ -321,6 +321,14 @@ export default class FilmPopup extends SmartView {
     const index = this._film.comments.indexOf(update);
     const comments = this.getElement().querySelectorAll('.film-details__comment');
     return comments[index];
+  }
+
+  shake(callback, element) {
+    element ? element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s` : this.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      element ? element.style.animation = '' : this.getElement().style.animation = '';
+      callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _deleteClickHandler(index) {
