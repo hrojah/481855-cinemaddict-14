@@ -1,4 +1,5 @@
 import AbstractView from './abstract';
+import {MenuItem} from '../const';
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const {name, count, type} = filter;
@@ -47,6 +48,14 @@ export default class MenuNav extends AbstractView {
   _menuClickHandler(evt) {
     evt.preventDefault();
     this._callback.menuClick(evt.target.id);
+
+    if (evt.target.id === MenuItem.STATS) {
+      this.getElement().querySelector('.main-navigation__item--active').classList.remove('main-navigation__item--active');
+      this.getElement().querySelector('.main-navigation__additional').classList.add('main-navigation__additional--active');
+      return;
+    }
+
+    this.getElement().querySelector('.main-navigation__additional').classList.remove('main-navigation__additional--active');
   }
 
   setStatsClickHandler(callback) {

@@ -1,6 +1,7 @@
 import AbstractView from './abstract';
 import {date} from '../utils/films';
 import {formatDate} from '../utils/films';
+import {MAX_DESCRIPTION_LENGTH} from '../const';
 
 const createFilmCardTemplate = ({filmInfo: {release: {releaseDate}, name, rating, runtime, genres, poster, description}, userDetails: {isFavorite, isWatched, isWatchList}, comments}) => {
   const isButtonActive = (flag) => {
@@ -12,8 +13,8 @@ const createFilmCardTemplate = ({filmInfo: {release: {releaseDate}, name, rating
   };
 
   const getDescription = (description) => {
-    if (description.length > 140) {
-      return `${description.substring(0, 140)}...`;
+    if (description.length > MAX_DESCRIPTION_LENGTH) {
+      return `${description.substring(0, MAX_DESCRIPTION_LENGTH)}...`;
     } return `${description}`;
   };
 

@@ -1,4 +1,4 @@
-import AbstractView from './abstract';
+import Smart from './smart';
 import {createRank} from '../utils/rank';
 
 const createRankUserTemplate = (films) => {
@@ -8,7 +8,7 @@ const createRankUserTemplate = (films) => {
   </section>`;
 };
 
-export default class RankUser extends AbstractView {
+export default class RankUser extends Smart {
   constructor(films) {
     super();
     this._films = films;

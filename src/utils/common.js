@@ -23,3 +23,7 @@ export const shake = (element, callback) => {
     callback();
   }, SHAKE_ANIMATION_TIMEOUT);
 };
+
+export const isOnline = () => {
+  return window.navigator.onLine;
+};

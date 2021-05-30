@@ -5,7 +5,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart';
 import {createRank} from '../utils/rank';
 import {formatDuration} from '../utils/films';
-import {BAR_HEIGHT, interval} from '../const';
+import {BAR_HEIGHT, Interval, PeriodValue} from '../const';
 import {getGenreCounts} from '../utils/common';
 
 dayjs.extend(isBetween);
@@ -114,19 +114,19 @@ const createStatisticTemplate = (data, int) => {
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${int === interval.ALL_TIME ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${int === Interval.ALL_TIME ? 'checked' : ''}>
       <label for="statistic-all-time" class="statistic__filters-label" id="all-time">All time</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${int === interval.TODAY ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${int === Interval.TODAY ? 'checked' : ''}>
       <label for="statistic-today" class="statistic__filters-label" id="today">Today</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${int === interval.WEEK ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${int === Interval.WEEK ? 'checked' : ''}>
       <label for="statistic-week" class="statistic__filters-label" id="week">Week</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${int === interval.MONTH ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${int === Interval.MONTH ? 'checked' : ''}>
       <label for="statistic-month" class="statistic__filters-label" id="month">Month</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${int === interval.YEAR ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${int === Interval.YEAR ? 'checked' : ''}>
       <label for="statistic-year" class="statistic__filters-label" id="year">Year</label>
     </form>
 
@@ -157,14 +157,13 @@ export default class Statistics extends SmartView {
     this._data = {
       films,
       dateFrom: (() => {
-        const years = 100;
-        return dayjs().subtract(years, 'year').toDate();
+        return dayjs().subtract(PeriodValue.MAX, 'year').toDate();
       })(),
       dateTo: dayjs().toDate(),
     };
 
     this._chart = null;
-    this._interval = interval.ALL_TIME;
+    this._interval = Interval.ALL_TIME;
     this._intervalChangeHandler = this._intervalChangeHandler.bind(this);
     this._setCharts();
     this.setInterval();
@@ -182,43 +181,38 @@ export default class Statistics extends SmartView {
   _intervalChangeHandler(evt) {
     this._interval = evt.target.id;
     switch (evt.target.id) {
-      case interval.TODAY:
+      case Interval.TODAY:
         this.updateDate({
           dateFrom: (() => {
-            const day = 1;
-            return dayjs().subtract(day, 'day').toDate();
+            return dayjs().subtract(PeriodValue.DAY, 'day').toDate();
           })(),
         });
         break;
-      case interval.WEEK:
+      case Interval.WEEK:
         this.updateDate({
           dateFrom: (() => {
-            const day = 7;
-            return dayjs().subtract(day, 'day').toDate();
+            return dayjs().subtract(PeriodValue.MAX_DAY, 'day').toDate();
           })(),
         });
         break;
-      case interval.MONTH:
+      case Interval.MONTH:
         this.updateDate({
           dateFrom: (() => {
-            const month = 1;
-            return dayjs().subtract(month, 'month').toDate();
+            return dayjs().subtract(PeriodValue.DAY, 'month').toDate();
           })(),
         });
         break;
-      case interval.YEAR:
+      case Interval.YEAR:
         this.updateDate({
           dateFrom: (() => {
-            const year = 1;
-            return dayjs().subtract(year, 'year').toDate();
+            return dayjs().subtract(PeriodValue.DAY, 'year').toDate();
           })(),
         });
         break;
       default:
         this.updateDate({
           dateFrom: (() => {
-            const year = 100;
-            return dayjs().subtract(year, 'year').toDate();
+            return dayjs().subtract(PeriodValue.MAX, 'year').toDate();
           })(),
         });
         break;

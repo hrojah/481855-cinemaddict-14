@@ -3,7 +3,8 @@ import FilmPopupView from '../view/popup';
 import {render, remove, replace, RenderPosition} from '../utils/render';
 import {isEscPressed} from '../utils/common';
 import {UserAction, UpdateType} from '../const';
-import {shake} from '../utils/common';
+import {shake, isOnline} from '../utils/common';
+// import {toast} from '../utils/toast';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -52,18 +53,16 @@ export default class Film {
       replace(this._filmComponent, prevFilmComponent);
       if (this._mode === Mode.POPUP) {
         const prevPopupComponent = this._popupComponent;
-        const scrollTop = prevPopupComponent.getElement().scrollTop;
         this._popupComponent = new FilmPopupView(this._film, this._changeData);
         this._comments = this._filmsModel.getComments();
         this._filmsModel.setComments(this._comments, this._film);
         this._popupComponent.updateElement();
         replace(this._popupComponent, prevPopupComponent);
-        this._popupComponent.getElement().scrollTop = scrollTop;
         this._popupComponent.setFormSubmitHandler(this._handleFormSubmit);
         this._popupComponent.setClickHandler(this._closePopup);
         this._popupComponent.setDeleteClickHandler(this._handleDeleteClick);
-        this._popupComponent.setInputHandler(this._handleTextAreaInput);
-        remove(prevFilmComponent);
+        this._popupComponent.setInputHandler();
+        remove(prevPopupComponent);
       }
     }
 
@@ -92,7 +91,7 @@ export default class Film {
     this._siteBodyElement.classList.add('hide-overflow');
     this._popupComponent.setClickHandler(this._closePopup);
     this._popupComponent.setDeleteClickHandler(this._handleDeleteClick);
-    this._popupComponent.setInputHandler(this._handleTextAreaInput);
+    this._popupComponent.setInputHandler();
     document.addEventListener('keydown', this._escKeydownHandler);
 
     if (prevPopupComponent === null) {
@@ -185,6 +184,11 @@ export default class Film {
   }
 
   _handleFormSubmit(update, id) {
+    // if (!isOnline()) {
+    //   toast('You can\'t save comment offline');
+    //   return;
+    // }
+
     this._changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
@@ -200,6 +204,11 @@ export default class Film {
   }
 
   _handleDeleteClick(index, id) {
+    // if (!isOnline()) {
+    //   toast('You can\'t delete comment offline');
+    //   return;
+    // }
+
     this._changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
@@ -225,16 +234,12 @@ export default class Film {
   }
 
   setViewState(update) {
-    const index = this._film.comments.indexOf(update);
-    const comments = this._popupComponent.getElement().querySelectorAll('.film-details__comment');
-    const deletedComment = comments[index];
+    // const index = this._film.comments.indexOf(update);
+    // const comments = this._popupComponent.getElement().querySelectorAll('.film-details__comment');
+    const deletedComment = this._popupComponent.getDeletedComment(update);
     const resetFormState = () => {
       this._popupComponent.errorDeleteComment(update);
     };
     shake(deletedComment, resetFormState);
-  }
-
-  _handleTextAreaInput(evt) {
-    this._popupComponent().querySelector('.film-details__comment-input').innerHTML = evt.target.value;
   }
 }

@@ -1,4 +1,4 @@
-import FilmsModel from './model/films';
+import FilmsModel from '../model/films';
 
 const Method = {
   GET: 'GET',
@@ -41,7 +41,7 @@ export default class Api {
       .then(FilmsModel.adaptToClient);
   }
 
-  addComments(id, comments) {
+  addComment(id, comments) {
     return this._load({
       url: `/comments/${id}`,
       method: Method.POST,
@@ -58,6 +58,16 @@ export default class Api {
       url: `/comments/${id}`,
       method: Method.DELETE,
     });
+  }
+
+  sync(data) {
+    return this._load({
+      url: 'movies/sync',
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    })
+      .then(Api.toJSON);
   }
 
   _load(

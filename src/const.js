@@ -28,7 +28,7 @@ export const MenuItem = {
   STATS: 'stats',
   FILMS: 'films',
 };
-export const interval = {
+export const Interval = {
   ALL_TIME: 'all-time',
   TODAY: 'today',
   WEEK: 'week',
@@ -36,9 +36,23 @@ export const interval = {
   YEAR: 'year',
 };
 
-export const filmCount = {
+export const ExtraComponent = {
+  MOST_COMMENTED_TITLE: 'Most commented',
+  TOP_RATED_TITLE: 'Top rated',
+  MOST_COMMENTED_CLASS: 'most-commented',
+  TOP_RATED_CLASS: 'top-rated',
+};
+
+export const FilmCount = {
   NOVICE: 10,
   FUN : 20,
 };
 
+export const PeriodValue = {
+  DAY: 1,
+  MAX_DAY: 7,
+  MAX: 100,
+};
+
 export const SHAKE_ANIMATION_TIMEOUT = 600;
+export const MAX_DESCRIPTION_LENGTH = 140;

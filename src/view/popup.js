@@ -317,6 +317,12 @@ export default class FilmPopup extends SmartView {
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textInputHandler);
   }
 
+  getDeletedComment(update) {
+    const index = this._film.comments.indexOf(update);
+    const comments = this.getElement().querySelectorAll('.film-details__comment');
+    return comments[index];
+  }
+
   _deleteClickHandler(index) {
     return (evt) => {
       evt.preventDefault();

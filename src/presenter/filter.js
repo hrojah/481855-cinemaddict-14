@@ -81,13 +81,10 @@ export default class Filter {
     this._boardPresenter.destroy();
     switch (menuItem) {
       case MenuItem.STATS:
-        document.querySelector('.main-navigation__item--active').classList.remove('main-navigation__item--active');
-        document.querySelector('.main-navigation__additional').classList.add('main-navigation__additional--active');
         this._statisticComponent = new StatisticsView(this._filmsModel.getFilms());
         render(this._filterContainer, this._statisticComponent, RenderPosition.BEFOREEND);
         break;
       default:
-        document.querySelector('.main-navigation__additional').classList.remove('main-navigation__additional--active');
         remove(this._statisticComponent);
         this._boardPresenter.init();
         this.init();
