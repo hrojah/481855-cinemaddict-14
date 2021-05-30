@@ -1,8 +1,7 @@
 import FilmsModel from '../model/films';
 import {isOnline} from '../utils/common.js';
-import Film from '../presenter/film';
 
-const getSyncedTasks = (items) => {
+const getSyncedFilms = (items) => {
   return items.filter(({success}) => success)
     .map(({payload}) => payload.film);
 };
@@ -93,8 +92,8 @@ export default class Provider {
 
       return this._api.sync(storeFilms)
         .then((response) => {
-          const createdFilms = getSyncedTasks(response.created);
-          const updatedFilms = getSyncedTasks(response.updated);
+          const createdFilms = getSyncedFilms(response.created);
+          const updatedFilms = getSyncedFilms(response.updated);
 
           const items = createStoreStructure([...createdFilms, ...updatedFilms]);
 
