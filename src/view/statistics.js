@@ -95,7 +95,7 @@ const createStatisticTemplate = (data, int) => {
   };
 
   const getDuration = (films) => {
-    const totalRuntime = films.reduce((acc, film) => acc + film.filmInfo.runtime, 0)
+    const totalRuntime = films.reduce((acc, film) => acc + film.filmInfo.runtime, 0);
     return formatDuration(totalRuntime);
   };
 
