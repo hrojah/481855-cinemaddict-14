@@ -79,8 +79,8 @@ const renderChart = (ctx, films, dateFrom, dateTo) => {
 
 const createStatisticTemplate = (data, int) => {
   const {films, dateFrom, dateTo} = data;
-
-  const filteredFilms = films.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dateFrom, dateTo));
+  const watchedFilms = films.filter((film) => film.userDetails.isWatched);
+  const filteredFilms = watchedFilms.filter((film) => dayjs(film.userDetails.watchingDate).isBetween(dateFrom, dateTo));
 
   const genres = getGenreCounts(filteredFilms);
 
@@ -95,11 +95,8 @@ const createStatisticTemplate = (data, int) => {
   };
 
   const getDuration = (films) => {
-    let duration = 0;
-    for (let i = 0; i < films.length; i++) {
-      duration += films[i].filmInfo.runtime;
-    }
-    return formatDuration(duration);
+    const totalRuntime = films.reduce((acc, film) => acc + film.filmInfo.runtime, 0)
+    return formatDuration(totalRuntime);
   };
 
   const duration = getDuration(filteredFilms);

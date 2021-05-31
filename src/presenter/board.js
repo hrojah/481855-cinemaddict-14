@@ -81,7 +81,7 @@ export default class Board {
       .values(this._filmPresenter)
       .forEach((presenter) => presenter.resetView());
     Object
-      .values(this._filmPresenterMostCommented)
+      .values(this._filmPresenterTopRated)
       .forEach((presenter) => presenter.resetView());
     Object
       .values(this._filmPresenterMostCommented)

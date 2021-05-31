@@ -1,16 +1,16 @@
 import {FilmCount} from '../const';
 
 export const createRank = (films) => {
-  const watchListFilms = films.filter((film) => film.userDetails.isWatchList);
+  const watchedFilms = films.filter((film) => film.userDetails.isWatched);
 
   switch (true) {
-    case watchListFilms.length === 0:
+    case watchedFilms.length === 0:
       return '';
-    case watchListFilms.length >= 0 && watchListFilms.length <= FilmCount.NOVICE:
+    case watchedFilms.length >= 0 && watchedFilms.length <= FilmCount.NOVICE:
       return 'Novice';
-    case watchListFilms.length >= FilmCount.NOVICE && watchListFilms.length <= FilmCount.FUN:
+    case watchedFilms.length >= FilmCount.NOVICE && watchedFilms.length <= FilmCount.FUN:
       return 'Fun';
-    case watchListFilms.length > FilmCount.FUN:
+    case watchedFilms.length > FilmCount.FUN:
       return 'Movie Buff';
   }
 };
