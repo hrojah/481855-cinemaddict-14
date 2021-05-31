@@ -12,16 +12,14 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
   };
 
   const renderComments = () => {
-    comments.map((comment) => {
+    return comments.map((comment) => {
       if (!comment.text || !comment.author || !comment.date || !comment.emoji) {
         return '';
-      }
-    });
-
-    return comments
-      .map((comment) => {
-        const {isDelete} = comment;
-        return `<li class="film-details__comment">
+      } else {
+        return comments
+          .map((comment) => {
+            const {isDelete} = comment;
+            return `<li class="film-details__comment">
            <span class="film-details__comment-emoji">
              <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
            </span>
@@ -33,8 +31,10 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
               </p>
             </div>
           </li>`;
-      })
-      .join('');
+          })
+          .join('');
+      }
+    });
   };
 
   const renderGenres = () => {
