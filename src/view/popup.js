@@ -12,11 +12,14 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
   };
 
   const renderComments = () => {
+    comments.map((comment) => {
+      if (!comment.text || !comment.author || !comment.date || !comment.emoji) {
+        return ``;
+      }
+    })
+
     return comments
       .map((comment) => {
-        if (!comment.text || !comment.author || !comment.date || !comment.emoji) {
-          return;
-        }
         const {isDelete} = comment;
         return `<li class="film-details__comment">
            <span class="film-details__comment-emoji">
@@ -329,7 +332,7 @@ export default class FilmPopup extends SmartView {
       element ? element.style.animation = '' : this.getElement().style.animation = '';
       callback();
     }, SHAKE_ANIMATION_TIMEOUT);
-  }
+  };
 
   _deleteClickHandler(index) {
     return (evt) => {
