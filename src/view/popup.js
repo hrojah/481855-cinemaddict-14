@@ -14,9 +14,9 @@ const createPopupTemplate = ({filmInfo: {release: {releaseDate, country}, name, 
   const renderComments = () => {
     comments.map((comment) => {
       if (!comment.text || !comment.author || !comment.date || !comment.emoji) {
-        return ``;
+        return '';
       }
-    })
+    });
 
     return comments
       .map((comment) => {
@@ -332,7 +332,7 @@ export default class FilmPopup extends SmartView {
       element ? element.style.animation = '' : this.getElement().style.animation = '';
       callback();
     }, SHAKE_ANIMATION_TIMEOUT);
-  };
+  }
 
   _deleteClickHandler(index) {
     return (evt) => {
